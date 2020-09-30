@@ -1,25 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
 
+import Trafic from './views/Trafic'
+import Menu from './views/Menu'
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Link to="/liikenne">Liikenne</Link>
+      <Link to="/ruokalista">Ruokalista</Link>
+      <Switch>
+        <Route path="/" exact>
+          <div>Koti</div>
+        </Route>
+        <Route path="/liikenne">
+          <Trafic />
+        </Route>
+        <Route path="/ruokalista">
+          <Menu />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
