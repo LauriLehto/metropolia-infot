@@ -21,9 +21,8 @@ const Menu = () => {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
         },
-      }) .then((result) => {
+      }).then((result) => {
         setData(result.data)
-
       }); 
       if(result.data){
         console.log(result.data)
@@ -38,7 +37,6 @@ const Menu = () => {
   if(data&&Object.keys(data).length){
     day = data.MenusForDays[0]
     console.log(day)
-
   }
   const dateString = day ? new Date(day.Date).toLocaleDateString() :''
   /* const json = JSON.parse('https://foodandco.fi/modules/json/json/Index?costNumber=3208&language=fi')

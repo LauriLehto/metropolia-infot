@@ -4,7 +4,6 @@ import {
   Container, 
   Col, 
   Row,
-  Header,
   Image,
   Table
 } from 'react-bootstrap'
