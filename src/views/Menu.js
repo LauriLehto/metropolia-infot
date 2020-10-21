@@ -36,20 +36,20 @@ const Menu = () => {
   let day;
   if(data&&Object.keys(data).length){
     day = data.MenusForDays[0]
-    console.log(day)
+    console.log(data, day)
   }
   const dateString = day ? new Date(day.Date).toLocaleDateString() :''
   /* const json = JSON.parse('https://foodandco.fi/modules/json/json/Index?costNumber=3208&language=fi')
   console.log(json) */
   return (
     <Container fluid>
-      {data &&
+      {day ?
       <Row>
         <Col>
           <Card style={{ width: "100%" }}>
           {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
           <Card.Body>
-            <Card.Title>Karaportti Ruokalista {dateString} <span>Lounas tarjolla {day.LunchTime}</span></Card.Title>
+            <Card.Title>Karaportti Ruokalista {dateString} <span>{day?`Lounas tarjolla ${day.LunchTime}`:'Tietoja ei saatavilla'}</span></Card.Title>
                 <Col>
                   <Row>
                     <Col>
@@ -75,7 +75,7 @@ const Menu = () => {
           </Card.Body>
         </Card>
         </Col>
-      </Row>
+      </Row> : <h1>Ei tietoja saatavilla</h1>
       }
     </Container>
   )
