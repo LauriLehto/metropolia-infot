@@ -165,7 +165,7 @@ const Trafic = () => {
     {
       lat:60.22329,  
       lon:24.76034,
-      offset:[-70, 0],
+      offset:[-50, -10],
       ttpos:'left',
       code: "E1814",
       header:'Pysäkki E1814'
@@ -224,7 +224,15 @@ const Trafic = () => {
   return (
     <Container fluid>
       <Navbar bg="white">
-        <Navbar.Brand>Metropolia</Navbar.Brand>
+        <Navbar.Brand>
+          <img
+            src="metropolia.svg"
+            width="200"
+            height="50"
+            className="d-inline-block align-top"
+            alt="Metropolia"
+          />
+        </Navbar.Brand>
         <Time time={time} />
       </Navbar>
       <MapContainer center={[60.2248, 24.7591]} zoom={17} scrollWheelZoom={false} style={{height:"90vh", widht:'100%'}}>
