@@ -75,7 +75,7 @@ const Menu = () => {
           </Card.Body>
         </Card>
         </Col>
-      </Row> : <h1>Ei tietoja saatavilla</h1>
+      </Row> : <h1>Ruokalista ei ole saatavilla</h1>
       }
     </Container>
   )

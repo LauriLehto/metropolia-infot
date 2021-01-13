@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { 
   Container, 
   Col, 
@@ -115,45 +116,34 @@ const Trafic = () => {
     return () => clearInterval(interval);
   }, []);
 
+  
   useEffect(()=>{
-
     update()
-
   }, [setData])
 
-  const update = async() => {
+  const getData = async (query) => {
     let newData = [...stops]
+    
     try{
       axios({
         url: hslApi,
         method: 'post',
         data: {
-          query: getStopById1
+          query: query
         }
       }).then((result) => {
         newData[0]=result.data.data
+        console.log(result.data.data)
         setData(newData)
-
       });
     }catch(err){
       console.error(err)
     } 
-    try{
-      axios({
-        url: hslApi,
-        method: 'post',
-        data: {
-          query: getStopById2
-        }
-      }).then((result) => {
-        newData[1]=result.data.data
-        setData(newData)
-      });
-    }catch(err){
-      console.error(err)
-    }
-    console.log(newData)
+  }
 
+  const update = async() => {
+    getData(getStopById1)
+    getData(getStopById2)
   }
 
   var now = new Date(),
@@ -189,11 +179,24 @@ const Trafic = () => {
   ]
 
   return (
-    <Container>
-      <Col>
+    <Container fluid>
+      <MapContainer center={[60.223882, 24.7559603]} zoom={17} scrollWheelZoom={false} style={{height:"100vh", widht:'100%'}}>
+        <h1 style={{zIndex:1000}}>Bussit Karaportin kampukselta</h1>
+        <h3>{time&&`${days[time.getDay()]}  ${time.toLocaleString()}`}</h3>
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={[51.505, -0.09]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </MapContainer>
+    
+      {/* <Col>
         <h1>Bussit Karaportin kampukselta</h1>
         <h3>{time&&`${days[time.getDay()]}  ${time.toLocaleString()}`}</h3>
-        {/* <p>{diff}, {convertSeconds(diff)}</p> */}  
         <Row>
           <Col>
             <h3>Karamalmi</h3>
@@ -202,7 +205,7 @@ const Trafic = () => {
               <thead>
                 <tr>
                   <th>Lähtee</th>
-                  {/* <th>Myöhässä</th> */}
+                 
                 </tr>
               </thead>
               <tbody>
@@ -213,7 +216,6 @@ const Trafic = () => {
                   return(
                     <tr key={d.scheduledArrival}>
                       <td>{convertSeconds(d.scheduledDeparture)} </td>
-                      {/* <td>{d.realTimeArrival&&convertSeconds(d.realTimeDeparture)}</td> */}
                     </tr>
                   )}
                 )}
@@ -227,7 +229,6 @@ const Trafic = () => {
               <thead>
                 <tr>
                   <th>Lähtee</th>
-                 {/*  <th>Myöhässä</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -238,7 +239,6 @@ const Trafic = () => {
                   return(
                     <tr key={d.scheduledArrival}>
                       <td>{convertSeconds(d.scheduledDeparture)} </td>
-                      {/* <td>{d.realTimeArrival&&convertSeconds(d.realTimeDeparture)}</td> */}
                     </tr>
                   )}
                 )}
@@ -251,7 +251,7 @@ const Trafic = () => {
             </div>
           </Col>
         </Row>
-      </Col>
+      </Col> */}
     </Container>
   )
 }

@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
 
 
 import Traffic from './views/Traffic'
+import Traffic2 from './views/Traffic2'
 import Menu from './views/Menu'
 
 function App() {
   return (
     <Router>
-     
       <Switch>
         <Route path="/" exact>
            <Link to="/liikenne">Liikenne</Link>
@@ -18,6 +18,9 @@ function App() {
         <Route path="/liikenne">
           <Traffic />
         </Route>
+        <Route path="/liikenne2">
+          <Traffic2 />
+        </Route> 
         <Route path="/ruokalista">
           <Menu />
         </Route>
