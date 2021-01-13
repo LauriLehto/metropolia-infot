@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Tooltip, CircleMarker } from 'react-leaflet'
 import { 
   Container, 
   Col, 
@@ -86,13 +86,13 @@ const Trafic = () => {
   `
   const hslApi = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql'
 
-  useEffect(() => {
+  /* useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date)
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
+ */
   
   useEffect(()=>{
     let newData = {...stopsData}
@@ -189,30 +189,34 @@ const Trafic = () => {
   ]
 
   const mapBusStopMarkers = () => (
-    stops.map(stop=>
+    stops.map(stop=> {
+      console.log(stopsData[stop.code])
+      return (
       <Marker position={[stop.lat,stop.lon]} key={stop.code}>
         <Tooltip direction={stop.ttpos} offset={stop.offset} opacity={1} permanent>
-          {stop.header}
-          <Table striped bordered hover size="sm">
+          <p style={{fontSize:18}}><b>{stop.header.toUpperCase()}</b></p>
+          <Table striped bordered>
             <thead>
               <tr>
-                <th>Linja</th>
+                <th>Suunta</th>
                 <th>Lähtee</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-              </tr>
-              <tr>
-                <td>Jacob</td>
-                <td>Thornton</td>
-              </tr>
+              {stopsData[stop.code] ? 
+                stopsData[stop.code].stoptimesWithoutPatterns.map(d => {
+                  return (
+                    <tr key={d.scheduledArrival}>
+                      <td>{d.headsign}</td>
+                      <td>{d.realtimeDeparture}</td>
+                    </tr>
+                  )
+                }) : <></>}
             </tbody>
           </Table>
         </Tooltip>
-      </Marker>
+      </Marker>)
+    }
       
     )
   )
@@ -230,11 +234,11 @@ const Trafic = () => {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[60.2238794,24.758149]}>
-          {/* <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup> */}
-        </Marker>
+        <CircleMarker 
+          center={[60.2238794,24.758149]} 
+          pathOptions={{ color: 'red' }}
+          radius={40}
+          />
         {mapBusStopMarkers()}
       </MapContainer>
     
