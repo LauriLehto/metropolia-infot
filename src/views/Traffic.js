@@ -188,7 +188,7 @@ const Trafic = () => {
     }
   ]
 
-  const mapBusStopMarkers = () => (
+  const renderBusStopMarkers = () => (
     stops.map(stop=> {
       console.log(stopsData[stop.code])
       return (
@@ -198,8 +198,8 @@ const Trafic = () => {
           <Table striped bordered>
             <thead>
               <tr>
+                <th>Aika</th>
                 <th>Suunta</th>
-                <th>Lähtee</th>
               </tr>
             </thead>
             <tbody>
@@ -207,8 +207,8 @@ const Trafic = () => {
                 stopsData[stop.code].stoptimesWithoutPatterns.map(d => {
                   return (
                     <tr key={d.stopSequence+d.scheduledDeparture+d.realtimeDeparture}>
+                      <td>{convertSeconds(d.realtimeDeparture)}</td>
                       <td>{d.headsign}</td>
-                      <td>{d.realtimeDeparture}</td>
                     </tr>
                   )
                 }) : <></>}
@@ -220,8 +220,6 @@ const Trafic = () => {
       
     )
   )
-
-  /* console.log(stopsData) */
 
   return (
     <Container fluid>
@@ -239,7 +237,7 @@ const Trafic = () => {
           pathOptions={{ color: 'red' }}
           radius={40}
           />
-        {mapBusStopMarkers()}
+        {renderBusStopMarkers()}
       </MapContainer>
     
       {/* <Col>
