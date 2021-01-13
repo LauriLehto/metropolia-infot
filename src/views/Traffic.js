@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet'
 import { 
   Container, 
   Col, 
   Row,
   Image,
-  Table
+  Table,
+  Navbar
 } from 'react-bootstrap'
 
 import kuva from '../images/kuva.jpg'
+import {Time} from '../components/Time'
 /* import { useQuery, gql } from '@apollo/client' */
 
 /* const STOPS_BY_ID = gql`
@@ -25,7 +27,7 @@ import kuva from '../images/kuva.jpg'
 
 const Trafic = () => {
 
-  const [ stops, setData] = useState([])
+  const [ stopsData, setData] = useState({})
   const [ time, setTime] = useState()
 
   const stopDetails = `
@@ -46,9 +48,9 @@ const Trafic = () => {
     }
   }`
 
-  const getStopById1 =  `
+  const getStopById = (id) => `
     {
-      stop(id:"HSL:2132226"){
+      stop(id:${id}){
         id
         name
         code
@@ -72,32 +74,7 @@ const Trafic = () => {
       }
     }`
 
-    const getStopById2 =  `
-    {
-      stop(id:"HSL:2132225"){
-        id
-        name
-        code
-        stoptimesWithoutPatterns {
-          scheduledArrival
-          realtimeArrival
-          arrivalDelay
-          scheduledDeparture
-          realtimeDeparture
-          departureDelay
-          timepoint
-          realtime
-          realtimeState
-          pickupType
-          dropoffType
-          serviceDay
-          stopHeadsign
-          headsign
-          stopSequence
-        }
-      }
-    }`
-
+   
   const getStopsKaraportti = `
   {
     stops(name:"Karamalmen"){
@@ -118,33 +95,38 @@ const Trafic = () => {
 
   
   useEffect(()=>{
+    let newData = {...stopsData}
     update()
+      .then(result => {
+        result.map(r => newData[r.data.data.stop.code]=r.data.data.stop)
+        console.log(newData)
+        setData(newData)
+      })
   }, [setData])
 
-  const getData = async (query) => {
-    let newData = [...stops]
-    
+  const update = async () => {
+    const newData = {...stopsData}
+    const hslIds = [
+      'HSL:2132226','HSL:2132225'
+    ]
+    return Promise.all(hslIds.map(id => getData(getStopById(`\"${id}\"`), id)))
+  }
+
+  const getData = async (query, id) => {
     try{
-      axios({
+      return axios({
         url: hslApi,
         method: 'post',
         data: {
           query: query
         }
-      }).then((result) => {
-        newData[0]=result.data.data
-        console.log(result.data.data)
-        setData(newData)
       });
     }catch(err){
       console.error(err)
     } 
   }
 
-  const update = async() => {
-    getData(getStopById1)
-    getData(getStopById2)
-  }
+  
 
   var now = new Date(),
   then = new Date(
@@ -168,30 +150,92 @@ const Trafic = () => {
     return `${hours}:${minutes.toString().length>1? minutes: `0${minutes}`}`
   }
 
-  const days = [
-    'Sunnuntai',
-    'Maanantai',
-    'Tiistai',
-    'Keskiviikko',
-    'Torstai',
-    'Perjantai',
-    'Lauantai'
+  
+
+  const stops = [
+    {
+      lat:60.22347, 
+      lon:24.76050,
+      offset:[0, 0],
+      ttpos:'right',
+      code: "E1815",
+      hslId: "HSL:2132226",
+      header:'Pysäkki E1815'
+    },
+    {
+      lat:60.22329,  
+      lon:24.76034,
+      offset:[-30, 30],
+      ttpos:'left',
+      code: "E1814",
+      header:'Pysäkki E1814'
+    },
+    {
+      lat:60.22572, 
+      lon:24.75767,
+      offset:[-10, -20],
+      code: "E1807",
+      ttpos:'top',
+      header:'Pysäkki E1807'
+    },
+    {
+      lat:60.22551, 
+      lon:24.76065,
+      offset:[0, 30],
+      code: "E1808",
+      ttpos:'right',
+      header:'Pysäkki E1808'
+    }
   ]
+
+  const mapBusStopMarkers = () => (
+    stops.map(stop=>
+      <Marker position={[stop.lat,stop.lon]} key={stop.code}>
+        <Tooltip direction={stop.ttpos} offset={stop.offset} opacity={1} permanent>
+          {stop.header}
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>Linja</th>
+                <th>Lähtee</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mark</td>
+                <td>Otto</td>
+              </tr>
+              <tr>
+                <td>Jacob</td>
+                <td>Thornton</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Tooltip>
+      </Marker>
+      
+    )
+  )
+
+  /* console.log(stopsData) */
 
   return (
     <Container fluid>
-      <MapContainer center={[60.223882, 24.7559603]} zoom={17} scrollWheelZoom={false} style={{height:"100vh", widht:'100%'}}>
-        <h1 style={{zIndex:1000}}>Bussit Karaportin kampukselta</h1>
-        <h3>{time&&`${days[time.getDay()]}  ${time.toLocaleString()}`}</h3>
+      <Navbar bg="white">
+        <Navbar.Brand>Metropolia</Navbar.Brand>
+        <Time time={time} />
+      </Navbar>
+      <MapContainer center={[60.2248, 24.7591]} zoom={17} scrollWheelZoom={false} style={{height:"90vh", widht:'100%'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[51.505, -0.09]}>
-          <Popup>
+        <Marker position={[60.2238794,24.758149]}>
+          {/* <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
+          </Popup> */}
         </Marker>
+        {mapBusStopMarkers()}
       </MapContainer>
     
       {/* <Col>
