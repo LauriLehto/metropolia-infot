@@ -1,7 +1,7 @@
 import React from 'react'
 import {Table} from 'react-bootstrap'
 
-export const ScheduleTable = ({data}) => {
+export const BusBoard = ({data}) => {
 
   const convertSeconds = (seconds) => {
     const hours = parseInt(seconds / 3600)
@@ -11,8 +11,8 @@ export const ScheduleTable = ({data}) => {
 
   return (
     <>
-      <h5><b>PYSÄKKI {data.code}</b></h5>
-      <Table>
+      <h4>{`PYSÄKKI ${data.code}`.toUpperCase()}</h4>
+      <Table size="sm">
         <thead>
           <tr>
             <th>Aika</th>

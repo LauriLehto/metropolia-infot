@@ -1,7 +1,7 @@
 import React from 'react'
 import {Table} from 'react-bootstrap'
 
-export const TrainTable = ({data, direction}) => {
+export const TrainBoard = ({data, direction}) => {
 
   const convertSeconds = (seconds) => {
     const hours = parseInt(seconds / 3600)
@@ -12,7 +12,7 @@ export const TrainTable = ({data, direction}) => {
   return (
     <>
       <h5><b>Junat {direction}</b></h5>
-      <Table>
+      <Table size="sm">
         <thead>
           <tr>
             <th>Aika</th>

@@ -9,7 +9,7 @@ export const Navigation = ({time}) => {
       <Navbar.Brand>
         <img
           src="metropolia.svg"
-          width="200"
+          width="150"
           height="50"
           className="d-inline-block align-top"
           alt="Metropolia"

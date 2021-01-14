@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Tooltip, CircleMarker } from 'react-le
 
 export const Map = ({stops, ll}) => {
   return (
-    <MapContainer center={ll} zoom={17} scrollWheelZoom={false} style={{ height: "90vh", widht: '100%' }}>
+    <MapContainer center={ll} zoom={16} scrollWheelZoom={false} style={{ height: "90vh", widht: '100%' }}>
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

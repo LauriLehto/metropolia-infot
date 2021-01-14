@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { MapContainer, TileLayer, Marker, Tooltip, CircleMarker } from 'react-leaflet'
 import {
   Container,
   Col,
@@ -10,11 +9,9 @@ import {
   Navbar
 } from 'react-bootstrap'
 
-import kuva from '../images/kuva.jpg'
-import { Time } from '../components/Time'
 import { Navigation } from '../components/Navigation'
-import { ScheduleTable } from '../components/ScheduleTable'
-import { TrainTable } from '../components/TrainTable'
+import { BusBoard } from '../components/BusBoard'
+import { TrainBoard } from '../components/TrainBoard'
 import { Map } from '../components/Map'
 import { getStopById, getStationInfo } from '../hslApi'
 /* import { useQuery, gql } from '@apollo/client' */
@@ -152,12 +149,16 @@ const Trafic = () => {
           <Map ll={[60.2238794, 24.758149]} stops={stops} />
         </Col>
         <Col xs="6" lg={{span: 2, order: 'first'}}>
-          {['E1807','E1814'].map(s => hslData.stops[s] && <ScheduleTable key={s} data={hslData.stops[s]} /> )}
-          <TrainTable data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign !=="Helsinki")} direction="länteen" />
+          {['E1807','E1814'].map(s => hslData.stops[s] && 
+            <BusBoard key={s} data={hslData.stops[s]} /> 
+          )}
+          <TrainBoard data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign !=="Helsinki")} direction="länteen" />
         </Col>
         <Col xs="6" lg="2">
-          {[ 'E1808', 'E1815'].map(s => hslData.stops[s] && <ScheduleTable key={s} data={hslData.stops[s]} /> )}
-          <TrainTable data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign === "Helsinki")} direction="itään" />
+          {[ 'E1808', 'E1815'].map(s => hslData.stops[s] && 
+            <BusBoard key={s} data={hslData.stops[s]} /> 
+          )}
+          <TrainBoard data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign === "Helsinki")} direction="itään" />
         </Col>
       </Row>
     </Container>
