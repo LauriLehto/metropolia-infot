@@ -118,7 +118,7 @@ const Trafic = () => {
     {
       lat: 60.22329,
       lon: 24.76034,
-      offset: [-30, -10],
+      offset: [-30, 0],
       ttpos: 'left',
       code: "E1814",
       header: 'Pysäkki E1814'

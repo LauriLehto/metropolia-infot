@@ -18,7 +18,7 @@ export const Map = ({stops, ll}) => {
         return (
           <Marker position={[stop.lat, stop.lon]} key={stop.code}>
             <Tooltip direction={stop.ttpos} offset={stop.offset} opacity={1} permanent>
-              <p style={{ fontSize: 16 }}><b>{stop.header.toUpperCase()}</b></p>
+              <p style={{ fontSize: 12 }}><b>{stop.header.toUpperCase()}</b></p>
             </Tooltip>
           </Marker>)
       })}
