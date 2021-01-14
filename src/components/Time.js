@@ -11,8 +11,6 @@ export const Time = ({time}) => {
     'Lauantai'
   ]
   return (
-    <div>
-      {time&&`${days[time.getDay()]}  ${time.toLocaleString()}`}
-    </div>
+    <h2>{time&&`${days[time.getDay()]}  ${time.toLocaleString()}`}</h2>
   )
 }

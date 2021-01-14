@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { MapContainer, TileLayer, Marker, Tooltip, CircleMarker } from 'react-leaflet'
-import { 
-  Container, 
-  Col, 
+import {
+  Container,
+  Col,
   Row,
   Image,
   Table,
@@ -11,7 +11,9 @@ import {
 } from 'react-bootstrap'
 
 import kuva from '../images/kuva.jpg'
-import {Time} from '../components/Time'
+import { Time } from '../components/Time'
+import { ScheduleTable } from '../components/ScheduleTable'
+import { getStopById, getStationInfo } from '../gqlQueries'
 /* import { useQuery, gql } from '@apollo/client' */
 
 /* const STOPS_BY_ID = gql`
@@ -27,93 +29,64 @@ import {Time} from '../components/Time'
 
 const Trafic = () => {
 
-  const [ stopsData, setData] = useState({})
-  const [ time, setTime] = useState()
+  const [stopsData, setData] = useState({})
+  const [time, setTime] = useState()
 
-  const stopDetails = `
-    {
-      stop(id:"HSL:2132226"){
-      id
-      name
-      gtfsId
-      code
-    }
-  }`
-  const nearest =` {
-    nearest (lat:60.224028, lon:24.758914){
-      edges{node{
-        id
-        distance
-      }}
-    }
-  }`
+  var now = new Date(),
+  then = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0, 0, 0),
+  diff = now.getTime() - then.getTime();
+  diff = diff.toString()
+  diff = diff.slice(0, -3)
+  diff = parseInt(diff)
 
-  const getStopById = (id) => `
-    {
-      stop(id:${id}){
-        id
-        name
-        code
-        stoptimesWithoutPatterns {
-          scheduledArrival
-          realtimeArrival
-          arrivalDelay
-          scheduledDeparture
-          realtimeDeparture
-          departureDelay
-          timepoint
-          realtime
-          realtimeState
-          pickupType
-          dropoffType
-          serviceDay
-          stopHeadsign
-          headsign
-          stopSequence
-        }
-      }
-    }`
 
-   
-  const getStopsKaraportti = `
-  {
-    stops(name:"Karamalmen"){
-      id
-      gtfsId
-      name
-    }
+ /*  const convertSeconds = (seconds) => {
+
+    const hours = parseInt(seconds / 3600)
+    const minutes = parseInt(seconds % 3600 / 60)
+    return `${hours}:${minutes.toString().length > 1 ? minutes : `0${minutes}`}`
   }
-  `
+ */
   const hslApi = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql'
 
-  /* useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date)
     }, 1000);
     return () => clearInterval(interval);
   }, []);
- */
-  
-  useEffect(()=>{
-    let newData = {...stopsData}
+
+
+  useEffect(() => {
+    let newData = { ...stopsData }
     update()
       .then(result => {
-        result.map(r => newData[r.data.data.stop.code]=r.data.data.stop)
+        /* console.log(result)
+        return result */
+        result.map(r => newData[r.data.data.stop.code] = r.data.data.stop)
         console.log(newData)
         setData(newData)
       })
   }, [setData])
 
   const update = async () => {
-    const newData = {...stopsData}
+    const newData = { ...stopsData }
     const hslIds = [
-      'HSL:2132226','HSL:2132225', 'HSL:2132207', "HSL:2132208"
+      'HSL:2132226', 'HSL:2132225', 'HSL:2132207', "HSL:2132208"
     ]
-    return Promise.all(hslIds.map(id => getData(getStopById(`\"${id}\"`), id)))
+        return Promise.all(hslIds.map(id => getData(getStopById(id), id)))
+    /* return Promise.all(hslIds.map(id => {
+      console.log(getStationInfo(id))
+      return getData(getStationInfo(id), id)
+    })) */
   }
 
   const getData = async (query, id) => {
-    try{
+    try {
       return axios({
         url: hslApi,
         method: 'post',
@@ -121,109 +94,68 @@ const Trafic = () => {
           query: query
         }
       });
-    }catch(err){
+    } catch (err) {
       console.error(err)
-    } 
+    }
   }
 
-  
 
-  var now = new Date(),
-  then = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      0,0,0),
-  diff = now.getTime() - then.getTime();
-  diff = diff.toString()
-  diff = diff.slice(0, -3)
-  diff = parseInt(diff)
-  /* if(stops[0]&&diff>stops[0].stop.stoptimesWithoutPatterns[0].scheduledArrival||stops[1]&&diff>stops[1].stop.stoptimesWithoutPatterns[0].scheduledArrival){
-    console.log('update')
-    update()
-  } */
 
-  const convertSeconds = (seconds) => {
 
-    const hours = parseInt(seconds/3600)
-    const minutes = parseInt(seconds%3600/60)
-    return `${hours}:${minutes.toString().length>1? minutes: `0${minutes}`}`
-  }
 
-  
 
   const stops = [
     {
-      lat:60.22347, 
-      lon:24.76050,
-      offset:[50, 0],
-      ttpos:'right',
+      lat: 60.22347,
+      lon: 24.76050,
+      offset: [50, 0],
+      ttpos: 'right',
       code: "E1815",
       hslId: "HSL:2132226",
-      header:'Pysäkki E1815'
+      header: 'Pysäkki E1815'
     },
     {
-      lat:60.22329,  
-      lon:24.76034,
-      offset:[-50, -10],
-      ttpos:'left',
+      lat: 60.22329,
+      lon: 24.76034,
+      offset: [-50, -10],
+      ttpos: 'left',
       code: "E1814",
-      header:'Pysäkki E1814'
+      header: 'Pysäkki E1814'
     },
     {
-      lat:60.22572, 
-      lon:24.75767,
-      offset:[-70, 0],
+      lat: 60.22572,
+      lon: 24.75767,
+      offset: [-70, 0],
       code: "E1807",
-      ttpos:'left',
-      header:'Pysäkki E1807'
+      ttpos: 'left',
+      header: 'Pysäkki E1807'
     },
     {
-      lat:60.22551, 
-      lon:24.76065,
-      offset:[50, 0],
+      lat: 60.22551,
+      lon: 24.76065,
+      offset: [50, 0],
       code: "E1808",
-      ttpos:'right',
-      header:'Pysäkki E1808'
+      ttpos: 'right',
+      header: 'Pysäkki E1808'
     }
   ]
 
   const renderBusStopMarkers = () => (
-    stops.map(stop=> {
-      console.log(stopsData[stop.code])
+    stops.map(stop => {
       return (
-      <Marker position={[stop.lat,stop.lon]} key={stop.code}>
-        <Tooltip direction={stop.ttpos} offset={stop.offset} opacity={1} permanent>
-          <p style={{fontSize:18}}><b>{stop.header.toUpperCase()}</b></p>
-          <Table striped bordered>
-            <thead>
-              <tr>
-                <th>Aika</th>
-                <th>Suunta</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stopsData[stop.code] ? 
-                stopsData[stop.code].stoptimesWithoutPatterns.map(d => {
-                  return (
-                    <tr key={d.stopSequence+d.scheduledDeparture+d.realtimeDeparture}>
-                      <td>{convertSeconds(d.realtimeDeparture)}</td>
-                      <td>{d.headsign}</td>
-                    </tr>
-                  )
-                }) : <></>}
-            </tbody>
-          </Table>
-        </Tooltip>
-      </Marker>)
+        <Marker position={[stop.lat, stop.lon]} key={stop.code}>
+          <Tooltip direction={stop.ttpos} offset={stop.offset} opacity={1} permanent>
+            <p style={{ fontSize: 16 }}><b>{stop.header.toUpperCase()}</b></p>
+          </Tooltip>
+        </Marker>)
     }
-      
+
     )
   )
 
   return (
     <Container fluid>
-      <Navbar bg="white">
+      <Navbar bg="white justify-content-between">
         <Navbar.Brand>
           <img
             src="metropolia.svg"
@@ -235,19 +167,29 @@ const Trafic = () => {
         </Navbar.Brand>
         <Time time={time} />
       </Navbar>
-      <MapContainer center={[60.2248, 24.7591]} zoom={17} scrollWheelZoom={false} style={{height:"90vh", widht:'100%'}}>
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <CircleMarker 
-          center={[60.2238794,24.758149]} 
-          pathOptions={{ color: 'red' }}
-          radius={40}
-          />
-        {renderBusStopMarkers()}
-      </MapContainer>
-    
+      <Row>
+        <Col xs="12" lg="8">
+          <MapContainer center={[60.2248, 24.7591]} zoom={17} scrollWheelZoom={false} style={{ height: "90vh", widht: '100%' }}>
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <CircleMarker
+              center={[60.2238794, 24.758149]}
+              pathOptions={{ color: 'red' }}
+              radius={40}
+            />
+            {renderBusStopMarkers()}
+          </MapContainer>
+        </Col>
+        <Col xs="6" lg={{span: 2, order: 'first'}}>
+          {['E1807','E1814'].map(s => <ScheduleTable data={stopsData[s]} />)}
+        </Col>
+        <Col xs="6" lg="2">
+          {[ 'E1808', 'E1815'].map(s => <ScheduleTable data={stopsData[s]} />)}
+        </Col>
+      </Row>
+
       {/* <Col>
         <h1>Bussit Karaportin kampukselta</h1>
         <h3>{time&&`${days[time.getDay()]}  ${time.toLocaleString()}`}</h3>
