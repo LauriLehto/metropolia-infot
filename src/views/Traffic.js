@@ -12,8 +12,11 @@ import {
 
 import kuva from '../images/kuva.jpg'
 import { Time } from '../components/Time'
+import { Navigation } from '../components/Navigation'
 import { ScheduleTable } from '../components/ScheduleTable'
-import { getStopById, getStationInfo } from '../gqlQueries'
+import { TrainTable } from '../components/TrainTable'
+import { Map } from '../components/Map'
+import { getStopById, getStationInfo } from '../hslApi'
 /* import { useQuery, gql } from '@apollo/client' */
 
 /* const STOPS_BY_ID = gql`
@@ -29,7 +32,7 @@ import { getStopById, getStationInfo } from '../gqlQueries'
 
 const Trafic = () => {
 
-  const [stopsData, setData] = useState({})
+  const [hslData, setData] = useState({stations:[],stops:{}})
   const [time, setTime] = useState()
 
   var now = new Date(),
@@ -62,27 +65,33 @@ const Trafic = () => {
 
 
   useEffect(() => {
-    let newData = { ...stopsData }
-    update()
+    let newData = { ...hslData }
+    updateStops()
       .then(result => {
-        /* console.log(result)
-        return result */
-        result.map(r => newData[r.data.data.stop.code] = r.data.data.stop)
+        console.log(result)
+        result.map(r => newData.stops[r.data.data.stop.code] = r.data.data.stop)
+        console.log(newData)
+        setData(newData)
+      })
+    updateStations()
+      .then(result => {
+        console.log(result)
+        result.map(r => newData.stations.push(r.data.data.station))
         console.log(newData)
         setData(newData)
       })
   }, [setData])
 
-  const update = async () => {
-    const newData = { ...stopsData }
-    const hslIds = [
-      'HSL:2132226', 'HSL:2132225', 'HSL:2132207', "HSL:2132208"
-    ]
-        return Promise.all(hslIds.map(id => getData(getStopById(id), id)))
-    /* return Promise.all(hslIds.map(id => {
-      console.log(getStationInfo(id))
-      return getData(getStationInfo(id), id)
-    })) */
+  const updateStops = async () => {
+    const hslStops = [ 'HSL:2132226', 'HSL:2132225', 'HSL:2132207', "HSL:2132208" ]
+
+    return Promise.all(hslStops.map(id => getData(getStopById(id))))
+  }
+
+  const updateStations= async () => {
+    const hslStations = ['HSL:2000204']
+
+    return Promise.all(hslStations.map(id => getData(getStationInfo(id))))
   }
 
   const getData = async (query, id) => {
@@ -99,16 +108,11 @@ const Trafic = () => {
     }
   }
 
-
-
-
-
-
   const stops = [
     {
       lat: 60.22347,
       lon: 24.76050,
-      offset: [50, 0],
+      offset: [30, 0],
       ttpos: 'right',
       code: "E1815",
       hslId: "HSL:2132226",
@@ -117,7 +121,7 @@ const Trafic = () => {
     {
       lat: 60.22329,
       lon: 24.76034,
-      offset: [-50, -10],
+      offset: [-30, -10],
       ttpos: 'left',
       code: "E1814",
       header: 'Pysäkki E1814'
@@ -125,7 +129,7 @@ const Trafic = () => {
     {
       lat: 60.22572,
       lon: 24.75767,
-      offset: [-70, 0],
+      offset: [-50, 0],
       code: "E1807",
       ttpos: 'left',
       header: 'Pysäkki E1807'
@@ -133,121 +137,29 @@ const Trafic = () => {
     {
       lat: 60.22551,
       lon: 24.76065,
-      offset: [50, 0],
+      offset: [30, 0],
       code: "E1808",
       ttpos: 'right',
       header: 'Pysäkki E1808'
     }
   ]
 
-  const renderBusStopMarkers = () => (
-    stops.map(stop => {
-      return (
-        <Marker position={[stop.lat, stop.lon]} key={stop.code}>
-          <Tooltip direction={stop.ttpos} offset={stop.offset} opacity={1} permanent>
-            <p style={{ fontSize: 16 }}><b>{stop.header.toUpperCase()}</b></p>
-          </Tooltip>
-        </Marker>)
-    }
-
-    )
-  )
-
   return (
     <Container fluid>
-      <Navbar bg="white justify-content-between">
-        <Navbar.Brand>
-          <img
-            src="metropolia.svg"
-            width="200"
-            height="50"
-            className="d-inline-block align-top"
-            alt="Metropolia"
-          />
-        </Navbar.Brand>
-        <Time time={time} />
-      </Navbar>
+      <Navigation time={time} />
       <Row>
         <Col xs="12" lg="8">
-          <MapContainer center={[60.2248, 24.7591]} zoom={17} scrollWheelZoom={false} style={{ height: "90vh", widht: '100%' }}>
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <CircleMarker
-              center={[60.2238794, 24.758149]}
-              pathOptions={{ color: 'red' }}
-              radius={40}
-            />
-            {renderBusStopMarkers()}
-          </MapContainer>
+          <Map ll={[60.2238794, 24.758149]} stops={stops} />
         </Col>
         <Col xs="6" lg={{span: 2, order: 'first'}}>
-          {['E1807','E1814'].map(s => <ScheduleTable data={stopsData[s]} />)}
+          {['E1807','E1814'].map(s => hslData.stops[s] && <ScheduleTable key={s} data={hslData.stops[s]} /> )}
+          <TrainTable data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign !=="Helsinki")} direction="länteen" />
         </Col>
         <Col xs="6" lg="2">
-          {[ 'E1808', 'E1815'].map(s => <ScheduleTable data={stopsData[s]} />)}
+          {[ 'E1808', 'E1815'].map(s => hslData.stops[s] && <ScheduleTable key={s} data={hslData.stops[s]} /> )}
+          <TrainTable data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign === "Helsinki")} direction="itään" />
         </Col>
       </Row>
-
-      {/* <Col>
-        <h1>Bussit Karaportin kampukselta</h1>
-        <h3>{time&&`${days[time.getDay()]}  ${time.toLocaleString()}`}</h3>
-        <Row>
-          <Col>
-            <h3>Karamalmi</h3>
-            <h2>E1815</h2>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Lähtee</th>
-                 
-                </tr>
-              </thead>
-              <tbody>
-                {stops[0]&&stops[0].stop.stoptimesWithoutPatterns.map(d=> {
-                  
-                  let date = new Date
-                  date = date.getTime()
-                  return(
-                    <tr key={d.scheduledArrival}>
-                      <td>{convertSeconds(d.scheduledDeparture)} </td>
-                    </tr>
-                  )}
-                )}
-              </tbody>
-            </Table>
-          </Col>
-          <Col>
-            <h3>Karamalmi</h3>
-            <h2>E1814</h2>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Lähtee</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stops[0]&&stops[0].stop.stoptimesWithoutPatterns.map(d=> {
-                  
-                  let date = new Date
-                  date = date.getTime()
-                  return(
-                    <tr key={d.scheduledArrival}>
-                      <td>{convertSeconds(d.scheduledDeparture)} </td>
-                    </tr>
-                  )}
-                )}
-              </tbody>
-            </Table>
-          </Col>
-          <Col sm="6" style={{height:"100%",position: "relative"}} className="flex-d align-items-strech justify-content-end">
-            <div style={{height:"100%", position:"absolute"}}>
-            <Image style={{width:"100%"}} src={kuva} alt="Kuva" />
-            </div>
-          </Col>
-        </Row>
-      </Col> */}
     </Container>
   )
 }

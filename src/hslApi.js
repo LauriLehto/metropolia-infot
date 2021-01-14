@@ -55,25 +55,27 @@ export const getStopsKaraportti = `
 `
 
 export const getStationInfo = (id) => `
-  {
-    station(id: "${id}") {
-      name
-      gtfsId
-      routes
-      stoptimesWithoutPatterns(numberOfDepartures: 10) {
-        stop {
-          platformCode
-        }
-        serviceDay
-        scheduledArrival
-        scheduledDeparture
-        trip {
-          route {
-            shortName
-          }
-        }
-        headsign
-      }
+{
+  station(id:"${id}"){
+    id
+    name
+    stoptimesWithoutPatterns (numberOfDepartures:8) {
+      scheduledArrival
+      realtimeArrival
+      arrivalDelay
+      scheduledDeparture
+      realtimeDeparture
+      departureDelay
+      timepoint
+      realtime
+      realtimeState
+      pickupType
+      dropoffType
+      serviceDay
+      stopHeadsign
+      headsign
+      stopSequence
     }
-  } 
+  }
+}
 `

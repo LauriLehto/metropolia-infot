@@ -1,7 +1,7 @@
 import React from 'react'
 import {Table} from 'react-bootstrap'
 
-export const ScheduleTable = ({data}) => {
+export const TrainTable = ({data, direction}) => {
 
   const convertSeconds = (seconds) => {
     const hours = parseInt(seconds / 3600)
@@ -11,7 +11,7 @@ export const ScheduleTable = ({data}) => {
 
   return (
     <>
-      <h5><b>PYSÄKKI {data.code}</b></h5>
+      <h5><b>Junat {direction}</b></h5>
       <Table>
         <thead>
           <tr>
@@ -21,7 +21,7 @@ export const ScheduleTable = ({data}) => {
         </thead>
         <tbody>
           {data ?
-            data.stoptimesWithoutPatterns.map(d => {
+            data.map(d => {
               return (
                 <tr key={d.stopSequence + d.scheduledDeparture + d.realtimeDeparture}>
                   <td style={{width:10}}>{convertSeconds(d.realtimeDeparture)}</td>
