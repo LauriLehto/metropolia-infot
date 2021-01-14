@@ -4,9 +4,11 @@ import {Table} from 'react-bootstrap'
 export const TrainBoard = ({data, direction}) => {
 
   const convertSeconds = (seconds) => {
-    const hours = parseInt(seconds / 3600)
+    let hours = parseInt(seconds / 3600)
+    if(hours==24){hours=0}
+    if(hours==25){hours=1}
     const minutes = parseInt(seconds % 3600 / 60)
-    return `${hours}:${minutes.toString().length > 1 ? minutes : `0${minutes}`}`
+    return `${hours.toString().length > 1 ? hours : `0${hours}`}:${minutes.toString().length > 1 ? minutes : `0${minutes}`}`
   }
 
   return (

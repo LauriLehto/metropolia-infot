@@ -27,7 +27,7 @@ import { getStopById, getStationInfo } from '../hslApi'
   }
 `; */
 
-const Trafic = () => {
+const Traffic = () => {
 
   const [hslData, setData] = useState({stations:[],stops:{}})
   const [time, setTime] = useState()
@@ -109,8 +109,8 @@ const Trafic = () => {
     {
       lat: 60.22347,
       lon: 24.76050,
-      offset: [30, 0],
-      ttpos: 'right',
+      offset: [-15, -15],
+      ttpos: 'top',
       code: "E1815",
       hslId: "HSL:2132226",
       header: 'Pysäkki E1815'
@@ -118,25 +118,25 @@ const Trafic = () => {
     {
       lat: 60.22329,
       lon: 24.76034,
-      offset: [-30, 0],
-      ttpos: 'left',
+      offset: [-20, 30],
+      ttpos: 'bottom',
       code: "E1814",
       header: 'Pysäkki E1814'
     },
     {
       lat: 60.22572,
       lon: 24.75767,
-      offset: [-50, 0],
+      offset: [0,0],
       code: "E1807",
-      ttpos: 'left',
+      ttpos: 'top',
       header: 'Pysäkki E1807'
     },
     {
       lat: 60.22551,
       lon: 24.76065,
-      offset: [30, 0],
+      offset: [-20, 30],
       code: "E1808",
-      ttpos: 'right',
+      ttpos: 'bottom',
       header: 'Pysäkki E1808'
     }
   ]
@@ -145,19 +145,21 @@ const Trafic = () => {
     <Container fluid>
       <Navigation time={time} />
       <Row>
-        <Col xs="12" lg="8">
+        <Col xs="12" md="6">
           <Map ll={[60.2238794, 24.758149]} stops={stops} />
         </Col>
-        <Col xs="6" lg={{span: 2, order: 'first'}}>
+        <Col xs="4" lg="2">
           {['E1807','E1814'].map(s => hslData.stops[s] && 
             <BusBoard key={s} data={hslData.stops[s]} /> 
           )}
-          <TrainBoard data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign !=="Helsinki")} direction="länteen" />
         </Col>
-        <Col xs="6" lg="2">
+        <Col xs="4" lg="2">
           {[ 'E1808', 'E1815'].map(s => hslData.stops[s] && 
             <BusBoard key={s} data={hslData.stops[s]} /> 
           )}
+       </Col>
+       <Col xs="4" lg="2">
+          <TrainBoard data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign !=="Helsinki")} direction="länteen" />
           <TrainBoard data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign === "Helsinki")} direction="itään" />
         </Col>
       </Row>
@@ -165,4 +167,4 @@ const Trafic = () => {
   )
 }
 
-export default Trafic
+export default Traffic
