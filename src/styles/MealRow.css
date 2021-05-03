@@ -1,0 +1,10 @@
+.MealRow{
+  padding: 10px
+}
+.MealRowTitle {
+  font-family: "SansaPro-SemiBold",sans-serif;
+}
+
+.MealDietcodes {
+  color: red;
+}

@@ -9,57 +9,16 @@ import {
   Navbar
 } from 'react-bootstrap'
 
-import { Navigation } from '../components/Navigation'
 import { BusBoard } from '../components/BusBoard'
 import { TrainBoard } from '../components/TrainBoard'
 import { Map } from '../components/Map'
 import { getStopById, getStationInfo } from '../hslApi'
-/* import { useQuery, gql } from '@apollo/client' */
-
-/* const STOPS_BY_ID = gql`
-  query GetStopsById {
-    {
-      stop(id: "HSL:1140447") {
-        name
-        wheelchairBoarding
-      }
-    }
-  }
-`; */
 
 const Traffic = () => {
 
   const [hslData, setData] = useState({stations:[],stops:{}})
-  const [time, setTime] = useState()
-
-  var now = new Date(),
-  then = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0, 0, 0),
-  diff = now.getTime() - then.getTime();
-  diff = diff.toString()
-  diff = diff.slice(0, -3)
-  diff = parseInt(diff)
-
-
- /*  const convertSeconds = (seconds) => {
-
-    const hours = parseInt(seconds / 3600)
-    const minutes = parseInt(seconds % 3600 / 60)
-    return `${hours}:${minutes.toString().length > 1 ? minutes : `0${minutes}`}`
-  }
- */
+ 
   const hslApi = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql'
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date)
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
 
   useEffect(() => {
     let newData = { ...hslData }
@@ -143,7 +102,6 @@ const Traffic = () => {
 
   return (
     <Container fluid>
-      <Navigation time={time} />
       <Row>
         <Col xs="12" md="6">
           <Map ll={[60.2238794, 24.758149]} stops={stops} />
