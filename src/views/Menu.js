@@ -3,7 +3,7 @@ import {
   Container, 
   Col, 
   Row,
-  Card,
+  Spinner
 } from 'react-bootstrap'
 import '../styles/Menu.css'
 import MealRow from '../components/MealRow'
@@ -23,21 +23,23 @@ const Menu = () => {
     
   },[setData])
 
-  let day;
   console.log(data)
   
   return (
     <Container fluid>
-      {data ?
-      <Row className='MenuWrapper'>
-        <Col >
-          {data && Object.keys(data.courses).map(c => {
-            return(
-              <MealRow meal={data.courses[c]} key={c} />
-            )
-          })}
-        </Col>
-      </Row> : <h1>Ruokalista ei ole saatavilla</h1>
+      {
+        data ?
+          <Row className='MenuWrapper'>
+            <Col >
+              {data && Object.keys(data.courses).map(c => {
+                return(
+                  <MealRow meal={data.courses[c]} key={c} />
+                )
+              })}
+            </Col>
+          </Row> 
+          : 
+          <Spinner animation="border" role="status" />
       }
     </Container>
   )

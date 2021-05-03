@@ -7,17 +7,6 @@ const TopBar = () => {
 
   const [time, setTime] = useState()
 
-  var now = new Date(),
-  then = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0, 0, 0),
-  diff = now.getTime() - then.getTime();
-  diff = diff.toString()
-  diff = diff.slice(0, -3)
-  diff = parseInt(diff)
-
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date)

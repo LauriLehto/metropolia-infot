@@ -4,9 +4,6 @@ import {
   Container,
   Col,
   Row,
-  Image,
-  Table,
-  Navbar
 } from 'react-bootstrap'
 
 import { BusBoard } from '../components/BusBoard'
