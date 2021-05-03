@@ -11,10 +11,13 @@ const Menu = () => {
 
   const [ data, setData ] = useState()
 
+  const foodandcoUrl = 'https://foodandco.fi/modules/json/json/Index?costNumber=3208&language=fi';
+  const sodexoUrl = 'https://www.sodexo.fi/en/ruokalistat/output/daily_json/158/2021-05-03';
+
   useEffect(()=>{
     try{
       const result = axios({
-        url: 'https://cors-anywhere.herokuapp.com/https://foodandco.fi/modules/json/json/Index?costNumber=3208&language=fi',
+        url: `https://cors-anywhere.herokuapp.com/${sodexoUrl}`,
         method: 'get',
         mode: 'no-cors',
         headers: {
@@ -23,10 +26,8 @@ const Menu = () => {
         },
       }).then((result) => {
         setData(result.data)
-      }); 
-      if(result.data){
         console.log(result.data)
-      }
+      }); 
     }catch(err){
       console.error(err)
     } 
@@ -34,7 +35,8 @@ const Menu = () => {
   },[setData])
 
   let day;
-  if(data&&Object.keys(data).length){
+console.log(data)
+  if( data.length() && Object.keys(data).length ){
     day = data.MenusForDays[0]
     console.log(data, day)
   }
