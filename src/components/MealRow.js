@@ -21,7 +21,7 @@ const MealRow = ({meal, key}) => {
             <Row className="d-flex justify-content-end">
               { meal.additionalDietInfo && meal.additionalDietInfo.dietcodeImages.map(image =>
               <Col xs={4}>
-                <img src={image}   />
+                <img src={image}  alt='diet icon' />
               </Col>
               )}
             </Row>
