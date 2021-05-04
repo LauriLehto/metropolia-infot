@@ -1,3 +1,5 @@
+export const hslApiUrl = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql'
+
 export const stopDetails = `
   {
     stop(id:"HSL:2132226"){
@@ -79,3 +81,4 @@ export const getStationInfo = (id) => `
   }
 }
 `
+

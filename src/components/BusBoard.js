@@ -2,6 +2,7 @@ import React from 'react'
 import {Table} from 'react-bootstrap'
 
 export const BusBoard = ({data}) => {
+  console.log(data)
 
   const convertSeconds = (seconds) => {
     let hours = parseInt(seconds / 3600)

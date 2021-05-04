@@ -4,92 +4,71 @@ import {
   Container,
   Col,
   Row,
+  Table
 } from 'react-bootstrap'
 
-import { BusBoard } from '../components/BusBoard'
-import { TrainBoard } from '../components/TrainBoard'
 import { Map } from '../components/Map'
-import { getStopById, getStationInfo } from '../hslApi'
+import { getStopById, getStationInfo, hslApiUrl } from '../data/hslApi'
 
-const stops = [
-  {
-    lat: 60.22347,
-    lon: 24.76050,
-    offset: [-15, -15],
-    ttpos: 'top',
-    code: "E1815",
-    hslId: "HSL:2132226",
-    header: 'Pysäkki E1815'
-  },
-  {
-    lat: 60.22329,
-    lon: 24.76034,
-    offset: [-20, 30],
-    ttpos: 'bottom',
-    code: "E1814",
-    header: 'Pysäkki E1814'
-  },
-  {
-    lat: 60.22572,
-    lon: 24.75767,
-    offset: [0,0],
-    code: "E1807",
-    ttpos: 'top',
-    header: 'Pysäkki E1807'
-  },
-  {
-    lat: 60.22551,
-    lon: 24.76065,
-    offset: [-20, 30],
-    code: "E1808",
-    ttpos: 'bottom',
-    header: 'Pysäkki E1808'
-  }
-]
+import { stops } from '../data/stops'
 
 const Traffic = () => {
 
-  const [hslData, setData] = useState({stations:[],stops:{}})
+  const [hslData, setData] = useState([])
  
-  const hslApi = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql'
-
-
   useEffect(() => {
-    let newData = { stations:[],stops:{} }
-
-    const updateStops = async () => {
-      const hslStops = [ 'HSL:2132226', 'HSL:2132225', 'HSL:2132207', "HSL:2132208" ]
-  
-      return Promise.all(hslStops.map(id => getData(getStopById(id))))
-    }
-  
-    const updateStations= async () => {
-      const hslStations = ['HSL:2000204']
-  
-      return Promise.all(hslStations.map(id => getData(getStationInfo(id))))
-    }
+    let stations = false
+    let stops = false
+    let newData = []
     updateStops()
       .then(result => {
-        console.log(result)
-        result.map(r => newData.stops[r.data.data.stop.code] = r.data.data.stop)
-        console.log(newData)
-        setData(hslData => ({...hslData, newData})
+        result.map(r => {
+          const stop = r.data.data.stop.code
+          const data =  r.data.data.stop.stoptimesWithoutPatterns
+          data.map(d=> {
+            const obj = {}
+            obj.stop = stop
+            obj.time = d.scheduledArrival
+            obj.heading = d.headsign
+            obj.type = "bus"
+            newData.push(obj)
+          })
+          setData([...hslData, ...newData])
+        })
       })
     updateStations()
       .then(result => {
-        console.log(result)
-        result.map(r => newData.stations.push(r.data.data.station))
-        console.log(newData)
-        setData((hslData => ({...hslData, newData})
+        result.map(r =>{
+          const station = r.data.data.station.name
+          const data =  r.data.data.station.stoptimesWithoutPatterns
+          data.map(d=> {
+            const obj = {}
+            obj.stop = station
+            obj.time = d.scheduledArrival
+            obj.heading = d.headsign
+            obj.type = "train"
+            newData.push(obj)
+          })
+          setData([...hslData, ...newData])
+        })
       })
-  }, [setData])
+      
+  }, [])
 
-  
+  const updateStops = async () => {
+    return Promise.all(stops.map(stop => getData(getStopById(stop.hslId))))
+  }
+
+  const updateStations= async () => {
+    const hslStations = ['HSL:2000204']
+
+    return Promise.all(hslStations.map(id => getData(getStationInfo(id))))
+  }
 
   const getData = async (query, id) => {
     try {
       return axios({
-        url: hslApi,
+        url: hslApiUrl,
         method: 'post',
         data: {
           query: query
@@ -100,31 +79,36 @@ const Traffic = () => {
     }
   }
 
- 
   return (
     <Container fluid>
       <Row>
         <Col xs="12" md="6">
           <Map ll={[60.2238794, 24.758149]} stops={stops} />
         </Col>
-        { hslData &&
-          <>
-            <Col xs="4" lg="2">
-              {['E1807','E1814'].map(s => hslData.stops[s] && 
-                <BusBoard key={s} data={hslData.stops[s]} /> 
+        <Col>
+          {hslData.length &&
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>Pysäkki</th>
+                  <th>Aika</th>
+                  <th>Tyyppi</th>
+                  <th>Suunta</th>
+                </tr>
+              </thead>
+            <tbody>
+              {hslData.sort((a, b) => a.time > b.time && 1 || -1).map(d => 
+                <tr key={hslData.indexOf(d)}>
+                  <td>{d.stop}</td>
+                  <td>{d.time}</td>
+                  <td>{d.type}</td>
+                  <td>{d.heading}</td>
+                </tr>
               )}
-            </Col>
-            <Col xs="4" lg="2">
-              {[ 'E1808', 'E1815'].map(s => hslData.stops[s] && 
-                <BusBoard key={s} data={hslData.stops[s]} /> 
-              )}
-            </Col>
-            <Col xs="4" lg="2">
-              <TrainBoard data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign !=="Helsinki")} direction="länteen" />
-              <TrainBoard data={hslData.stations[0] && hslData.stations[0].stoptimesWithoutPatterns.filter(d => d.headsign === "Helsinki")} direction="itään" />
-            </Col>
-          </>
-        }
+            </tbody>
+          </Table>
+          }
+        </Col>
       </Row>
     </Container>
   )
