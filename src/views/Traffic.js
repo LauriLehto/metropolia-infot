@@ -17,8 +17,6 @@ const Traffic = () => {
   const [hslData, setData] = useState([])
  
   useEffect(() => {
-    let stations = false
-    let stops = false
     let newData = []
     updateStops()
       .then(result => {
@@ -90,19 +88,19 @@ const Traffic = () => {
             <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
-                  <th>Pysäkki</th>
+                  <th></th>
                   <th>Aika</th>
-                  <th>Tyyppi</th>
                   <th>Suunta</th>
+                  <th>Pysäkki</th>
                 </tr>
               </thead>
             <tbody>
               {hslData.sort((a, b) => a.time > b.time && 1 || -1).map(d => 
                 <tr key={hslData.indexOf(d)}>
-                  <td>{d.stop}</td>
+                  <td><img style={{height:30,width:30}} src={d.type==="train" ? "Juna cmyk-test.svg" : "Bussi cmyk-01.svg"} /></td>
                   <td>{d.time}</td>
-                  <td>{d.type}</td>
                   <td>{d.heading}</td>
+                  <td>{d.stop}</td>
                 </tr>
               )}
             </tbody>
