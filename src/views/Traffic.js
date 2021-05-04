@@ -31,7 +31,8 @@ const Traffic = () => {
             obj.type = "bus"
             newData.push(obj)
           })
-          setData([...hslData, ...newData])
+          const cleanData = [...new Set([...hslData, ...newData].sort((a, b) => a.time > b.time && 1 || -1))]
+          setData(cleanData)
         })
       })
     updateStations()
@@ -47,7 +48,10 @@ const Traffic = () => {
             obj.type = "train"
             newData.push(obj)
           })
-          setData([...hslData, ...newData])
+          const cleanData = [...hslData, ...newData].sort((a, b) => a.time > b.time && 1 || -1)
+          cleanData.filter((item, pos) => cleanData[pos+1] && cleanData[pos+1].heading !== item.heading ||  cleanData[pos+1] && cleanData[pos+1].time !== item.time)
+
+          setData(cleanData)
         })
       })
       
@@ -77,6 +81,14 @@ const Traffic = () => {
     }
   }
 
+  const convertSeconds = (seconds) => {
+    let hours = parseInt(seconds / 3600)
+    if(hours===24){hours=0}
+    if(hours===25){hours=1}
+    const minutes = parseInt(seconds % 3600 / 60)
+    return `${hours.toString().length > 1 ? hours : `0${hours}`}:${minutes.toString().length > 1 ? minutes : `0${minutes}`}`
+  }
+
   return (
     <Container fluid>
       <Row>
@@ -85,7 +97,7 @@ const Traffic = () => {
         </Col>
         <Col>
           {hslData.length &&
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant="dark" size="sm">
               <thead>
                 <tr>
                   <th></th>
@@ -95,10 +107,10 @@ const Traffic = () => {
                 </tr>
               </thead>
             <tbody>
-              {hslData.sort((a, b) => a.time > b.time && 1 || -1).map(d => 
+              {hslData.map(d => 
                 <tr key={hslData.indexOf(d)}>
                   <td><img style={{height:30,width:30}} src={d.type==="train" ? "Juna cmyk-test.svg" : "Bussi cmyk-01.svg"} /></td>
-                  <td>{d.time}</td>
+                  <td>{convertSeconds(d.time)}</td>
                   <td>{d.heading}</td>
                   <td>{d.stop}</td>
                 </tr>
