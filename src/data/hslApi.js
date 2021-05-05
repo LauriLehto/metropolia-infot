@@ -1,5 +1,27 @@
 export const hslApiUrl = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql'
 
+export const stopsByRadius = (lat, lon) => `
+{
+  stopsByRadius(lat: ${lat}, lon: ${lon}, radius: 400) {
+    edges {
+      node {
+        stop {
+          name
+          lat
+          lon
+          gtfsId
+        }
+        distance
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+`
 export const stopDetails = `
   {
     stop(id:"HSL:2132226"){

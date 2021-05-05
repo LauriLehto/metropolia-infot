@@ -2,7 +2,8 @@ import React from 'react'
 
 import { MapContainer, TileLayer, Marker, Tooltip, CircleMarker } from 'react-leaflet'
 
-export const Map = ({stops}) => {
+export const Map = ({stops, lat, lon}) => {
+  console.log(stops)
   return (
     <MapContainer center={[60.22465, 24.75940]} zoom={16} scrollWheelZoom={false} style={{ height: "85vh", widht: '100%' }}>
       <TileLayer
@@ -10,15 +11,19 @@ export const Map = ({stops}) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <CircleMarker
-        center={[60.2238794, 24.758149]}
+        center={[lat,lon]}
         pathOptions={{ color: 'black' }}
         radius={40}
       />
-      {stops.map(stop => {
+      {stops.length && stops.map(stop => {
         return (
-          <Marker position={[stop.lat, stop.lon]} key={stop.code}>
-            <Tooltip direction={stop.ttpos} offset={stop.offset} opacity={1} permanent>
-              <p style={{ fontSize: 12 }}>{stop.header.toUpperCase()}</p>
+          <Marker position={[stop.lat, stop.lon]} key={stop.gtfsId}>
+            <Tooltip 
+              //direction={stop.ttpos} 
+              //offset={stop.offset} 
+              opacity={1} 
+              permanent>
+              <p style={{ fontSize: 12 }}>{stop.name.toUpperCase()}</p>
             </Tooltip>
           </Marker>)
       })}
