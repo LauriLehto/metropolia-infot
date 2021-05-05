@@ -10,6 +10,7 @@ export const stopsByRadius = (lat, lon) => `
           lat
           lon
           gtfsId
+          code
         }
         distance
       }

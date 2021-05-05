@@ -10,8 +10,6 @@ import {
 import { Map } from '../components/Map'
 import { getStopById, getStationInfo, stopsByRadius, hslApiUrl } from '../data/hslApi'
 
-//import { stops } from '../data/stops'
-
 const Traffic = () => {
 
   //Karaportti location
@@ -25,8 +23,12 @@ const Traffic = () => {
  
   useEffect(() => {
     let newData = []
-    if(stops.length){
-      updateStops()
+    updateStopsByRadius()
+        .then(result => {
+          const stopsByR = result.data.data.stopsByRadius.edges.map(d => d.node.stop)
+         setStops(stopsByR)
+        
+      updateStops(stopsByR)
         .then(result => {
           console.log(result)
           result.map(r => {
@@ -64,20 +66,14 @@ const Traffic = () => {
             setData(cleanData)
           })
         })
-      }
-      if(!stops.length){
-      updateStopsByRadius()
-        .then(result => {
-          const stopsByRad = result.data.data.stopsByRadius.edges.map(d => d.node.stop)
-          console.log(stopsByRad)
-          setStops(stopsByRad)
-        })
-      }
+      })
+     // if(!stops.length){
+      
       
   }, [])
 
-  const updateStops = async () => {
-    return Promise.all(stops.map(stop => getData(getStopById(stop.hslId))))
+  const updateStops = async (stops) => {
+    return Promise.all(stops.map(stop => getData(getStopById(stop.gtfsId))))
   }
 
   const updateStations= async () => {
