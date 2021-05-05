@@ -1,6 +1,9 @@
 const fetch = require('node-fetch')
 
-const url = 'https://www.sodexo.fi/en/ruokalistat/output/daily_json/158/2021-05-03';
+let date = new Date()
+let now = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' })
+let time = now.split('klo')[0].split('.').map(Function.prototype.call, String.prototype.trim).map(t => t.length===1 ? '0'+t : t).reverse().join('-')
+const url = 'https://www.sodexo.fi/en/ruokalistat/output/daily_json/158/2021-05-05';
 
 const handler = async function () {
   try {

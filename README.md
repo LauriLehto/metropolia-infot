@@ -1,3 +1,39 @@
+# Metropolian Karaportin Infotaulut
+
+Metropolia tilasi tämän toteutuksen osana innovaatio opintojani ja tarkoitus oli toteuttaa opiskelijoita varten digital signage ratkaisu. Tekninen puoli on toteutettu hyödyntäen Raspberry Pita ja piSignagea, joilla hallinnoidaan ja näytetään haluttu sisältö.
+
+Tämä github repo on osa toteutusta ja sen tarkoitus on näyttää verkkosivuna Karaportin opetuspisteen ruokalan lounaslista ja HSL:n liikennetiedot Karaportilta.
+
+## SPA, React ja Netlify
+
+Projekti on alustettu create-react-appilla ja se on julkaistu Netlifyn palvelimelle. Sovellus pyörii hyvin selaimella, mutta ruokalistan osalta aiheutti cors-ongelman. Yritettyäni ratkaista ongelman käyttäen cors-anywhere ratkaisua löysin ilokseni Netlifyn oman ratkaisun cors-ongelmaan.
+
+Tiedon ratkaisutavasta löysin [tästä](https://www.digitalocean.com/community/tutorials/nodejs-solve-cors-once-and-for-all-netlify-dev) artikkelista.
+
+Asentamalla netlify-cli'n `npm i -g netlify-cli` pystyi hyödyntämään valmiita funktioita, jotka korvaavat tarpeen hyödyntää palvelinta proxya cors-ongelman ratkaisemiseksi.
+
+Seuraavana projekti tulee alustaa,
+```
+netlify init
+```
+ja paikallisen proxy palvelimen saa käyntiin
+```
+netlify dev
+```
+Seuraavaksi piti luoda netlify.toml. Create-react-appia varten käytin lopulta muotoa
+```
+[build]
+  command = "npm run build && cd functions/node-fetch && npm install"
+  functions = "functions"
+  publish = "build"
+```
+Tarvittava funktio luotiin ensin antamalla komento
+```
+netlify functions:create
+```
+ja avautuvasta valikosta valittiin `node-fetch` ja valmis proxy funktio oli sen jälkeen löydettävissä kansiosta `/functions/node-fetch`. Tätä funktiota muokkaamalla pystyi hakemaan ruokalistan jsonina Sodexon [sivuilta](https://www.sodexo.fi/en/restaurants/metropolia-myllypuro). Karaportille ei ollut saatavana projektin aikaan ruokalistaa, joten käytin Myllypuroa testaamista varten.
+
+---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

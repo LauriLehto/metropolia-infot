@@ -23,7 +23,6 @@ const Traffic = () => {
   let midnightCheck = now.split('klo')[1].split('.')
   midnightCheck = midnightCheck.map(t => parseInt(t))
   midnightCheck = midnightCheck[0]*3600+midnightCheck[1]*60+midnightCheck[2]
-  console.log(midnightCheck)
 
   const [hslData, setData] = useState([])
   const [stops, setStops] = useState([])
@@ -37,7 +36,6 @@ const Traffic = () => {
         
         updateStops(stopsByR)
           .then(result => {
-            console.log(result)
             result.map(r => {
               const stop = r.data.data.stop.code
               const data =  r.data.data.stop.stoptimesWithoutPatterns
@@ -48,15 +46,16 @@ const Traffic = () => {
                 obj.heading = d.headsign
                 obj.type = "bus"
                 newData.push(obj)
+                return ''
               })
               //organise all results according to time
-              const cleanData = [...hslData, ...newData].sort((a, b) => a.time > b.time && 1 || -1)
+              const cleanData = [...hslData, ...newData].sort((a, b) => a.time > b.time ? 1 : -1)
               cleanData.filter((item, pos) => cleanData[pos+1] && cleanData[pos+1].heading !== item.heading ||  cleanData[pos+1] && cleanData[pos+1].time !== item.time)
               //organise results by day when nearing the end of the day (86400 -> 0000 seconds)
               const dataDay1 = cleanData.filter(d => d.time > midnightCheck)
               const dataDay2 = cleanData.filter(d => d.time < midnightCheck)
-              console.log('line51',dataDay1,dataDay2)
               setData([...dataDay1, ...dataDay2])
+              return ''
             })
           })
         updateStations()
@@ -72,12 +71,11 @@ const Traffic = () => {
                 obj.type = "train"
                 newData.push(obj)
               })
-              const cleanData = [...hslData, ...newData].sort((a, b) => a.time > b.time && 1 || -1)
+              const cleanData = [...hslData, ...newData].sort((a, b) => a.time > b.time ? 1 : -1)
               cleanData.filter((item, pos) => cleanData[pos+1] && cleanData[pos+1].heading !== item.heading ||  cleanData[pos+1] && cleanData[pos+1].time !== item.time)
               //organise results by day when nearing the end of the day (86400 -> 0000 seconds)
               const dataDay1 = cleanData.filter(d => d.time > midnightCheck)
               const dataDay2 = cleanData.filter(d => d.time < midnightCheck)
-              console.log(dataDay1,dataDay2)
               setData([...dataDay1, ...dataDay2])
             })
           })
@@ -122,7 +120,7 @@ const Traffic = () => {
     return `${hours.toString().length > 1 ? hours : `0${hours}`}:${minutes.toString().length > 1 ? minutes : `0${minutes}`}`
   }
 
-  console.log(hslData)
+  //console.log(hslData)
   return (
     <Container fluid>
       <Row>
