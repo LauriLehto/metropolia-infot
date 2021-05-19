@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import { 
-  Container, 
   Col, 
   Row,
   Spinner
@@ -13,24 +12,50 @@ const Menu = () => {
   const [ data, setData ] = useState({})
   const [ nextDay, setDay ] = useState(false)
 
+  const nextDayTimeString = () => {
+    const today = new Date()
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    let now = tomorrow.toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' })
+    let time = now.split(' ')[0].split('.').map(Function.prototype.call, String.prototype.trim).map(t => t.length===1 ? '0'+t : t).reverse().join('-')
+    return time
+  }
+
+  const todayTimeString = () => {
+    let now = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' })
+    let time = now.split(' ')[0].split('.').map(Function.prototype.call, String.prototype.trim).map(t => t.length===1 ? '0'+t : t).reverse().join('-')
+    return time
+  }
+
+  const getUrl = (time) => {
+      return `https://www.sodexo.fi/en/ruokalistat/output/daily_json/158/${time}`;
+  }
+
+  console.log(getUrl(todayTimeString()))
+
   useEffect(()=>{
+    const today = todayTimeString()
+    const nextDay = nextDayTimeString()
+    console.log(typeof today)
     try {
-      fetch("/.netlify/functions/node-fetch", { headers: { accept: "Accept: application/json" } })
+      fetch(`/.netlify/functions/node-fetch/?date=${today}`, { 
+        headers: { accept: "Accept: application/json" }, 
+        
+      }, {query: today})
         .then((x) => x.json())
         .then(({ data }) => {
+          console.log('today', data)
           if(data.courses){
-          setData(data)
-          console.log(data)
+            setData(data)
+            console.log(data)
           } else {
-            fetch("/.netlify/functions/next-day", { headers: { accept: "Accept: application/json" } })
+            fetch(`/.netlify/functions/node-fetch/?date=${nextDay}`, { headers: { accept: "Accept: application/json" } })
             .then((x) => x.json())
             .then(({ data }) => {
+              console.log('next day',data)
               if(data.courses){
                 setData(data)
                 setDay(true)
-              } else {
-                data.courses={}
-                setData(data)
               }
             })
 
@@ -43,6 +68,7 @@ const Menu = () => {
   },[setData])
 
 
+  console.log(data)
   //if(Object.keys(data).length && Object.keys(data.courses).length) {console.log(typeof data.courses )}
   
   return (
