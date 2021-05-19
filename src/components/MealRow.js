@@ -2,6 +2,9 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import '../styles/MealRow.css'
 
+import QRCode from 'qrcode.react'
+
+
 const MealRow = ({meal}) => {
   return (
     <Row className='MealRow' key={meal.title_fi}>
@@ -21,11 +24,14 @@ const MealRow = ({meal}) => {
           </Col>
           <Col xs={3} className='MealDietInfo '  >
             <Row className="d-flex justify-content-end h-100 d-inline-block">
-              { meal.additionalDietInfo.dietcodeImages && meal.additionalDietInfo.dietcodeImages.map(image =>
-              <Col xs={4} key={meal.title_fi+image} className="d-flex align-self-center">
-                <img   src={image}  alt='diet icon' />
-              </Col>
-              )}
+              { meal.additionalDietInfo.dietcodeImages ? 
+                meal.additionalDietInfo.dietcodeImages.map(image =>
+                  <Col xs={4} key={meal.title_fi+image} className="d-flex align-self-center">
+                    <img   src={image}  alt='diet icon' />
+                  </Col>
+                ) :
+                <QRCode value="https://www.sodexo.fi/en/restaurants/metropolia-myllypuro" />
+            }
             </Row>
           </Col>
         </Row>

@@ -4,13 +4,14 @@ import {
   Row,
   Spinner
 } from 'react-bootstrap'
+
 import '../styles/Menu.css'
 import MealRow from '../components/MealRow'
 
 const Menu = () => {
 
   const [ data, setData ] = useState({})
-  const [ nextDay, setDay ] = useState(false)
+  const [ thisday, setDate ] = useState(false)
 
   const nextDayTimeString = () => {
     const today = new Date()
@@ -48,7 +49,7 @@ const Menu = () => {
               console.log('next day',data)
               if(data.courses){
                 setData(data)
-                setDay(true)
+                setDate(true)
               }
             })
           }
@@ -62,13 +63,12 @@ const Menu = () => {
 
   return (
     <>
-      { nextDay && 
+     
       <Row>
         <Col>
-          <h4>Tarjolla huomenna</h4>
+        { thisday && <h4>Tarjolla huomenna</h4>}
         </Col>
       </Row>
-      }
       <Row className='MenuWrapper'>
         { Object.keys(data).length ?
           <Col>
