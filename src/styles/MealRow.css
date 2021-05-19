@@ -1,8 +1,14 @@
-.MealRow{
-  padding: 10px
+/* .MealRow{
+  padding: 10px;
+} */
+
+.row > * {
+  font-weight: bold;
+  color: black;
 }
-.MealRowTitle {
+.MealRowTitle{
   font-family: "SansaPro-SemiBold",sans-serif;
+  padding: 10px;
 }
 
 .MealDietcodes {

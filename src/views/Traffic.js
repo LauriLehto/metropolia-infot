@@ -9,6 +9,7 @@ import {
 
 import { Map } from '../components/Map'
 import { getStopById, getStationInfo, stopsByRadius, hslApiUrl } from '../data/hslApi'
+import '../styles/Traffic.css'
 
 const Traffic = () => {
 
@@ -143,7 +144,7 @@ const Traffic = () => {
                 <tr key={hslData.indexOf(d)}>
                   <td><img style={{height:30,width:30}} src={d.type==="train" ? "Juna cmyk-test.svg" : "Bussi cmyk-01.svg"} /></td>
                   <td>{convertSeconds(d.time)}</td>
-                  <td>{d.heading}</td>
+                  <td>{d.heading.toUpperCase()}</td>
                   <td>{d.stop}</td>
                 </tr>
               )}

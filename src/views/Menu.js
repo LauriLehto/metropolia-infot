@@ -27,16 +27,9 @@ const Menu = () => {
     return time
   }
 
-  const getUrl = (time) => {
-      return `https://www.sodexo.fi/en/ruokalistat/output/daily_json/158/${time}`;
-  }
-
-  console.log(getUrl(todayTimeString()))
-
   useEffect(()=>{
     const today = todayTimeString()
     const nextDay = nextDayTimeString()
-    console.log(typeof today)
     try {
       fetch(`/.netlify/functions/node-fetch/?date=${today}`, { 
         headers: { accept: "Accept: application/json" }, 
@@ -44,10 +37,10 @@ const Menu = () => {
       }, {query: today})
         .then((x) => x.json())
         .then(({ data }) => {
-          console.log('today', data)
+          //console.log('today', data)
           if(data.courses){
             setData(data)
-            console.log(data)
+            //console.log(data)
           } else {
             fetch(`/.netlify/functions/node-fetch/?date=${nextDay}`, { headers: { accept: "Accept: application/json" } })
             .then((x) => x.json())
@@ -58,7 +51,6 @@ const Menu = () => {
                 setDay(true)
               }
             })
-
           }
         })
     } catch(err){
@@ -68,9 +60,6 @@ const Menu = () => {
   },[setData])
 
 
-  console.log(data)
-  //if(Object.keys(data).length && Object.keys(data.courses).length) {console.log(typeof data.courses )}
-  
   return (
     <>
       { nextDay && 

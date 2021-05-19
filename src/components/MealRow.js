@@ -7,12 +7,14 @@ const MealRow = ({meal}) => {
     <Row className='MealRow' key={meal.title_fi}>
       <Col xs={6}>
         <Row>{meal.category.toUpperCase()}</Row>
-        <Row className='MealRowTitle'>{meal.title_fi}</Row>
+        <Row className='MealRowTitle'>
+          <p>{meal.title_fi}<br/>{meal.title_en}</p>
+        </Row>
       </Col>
       <Col xs={6}>
-        <Row className="d-flex justify-content-center">
-          <Col xs={3} className='MealPrices' >
-            {meal.price.split('/').map(p => <Row key={meal.title_fi+p}>{p}</Row> )}
+        <Row className="d-flex justify-content-center" style={{height:"100%"}}>
+          <Col xs={3} className='MealPrices align-self-center' >
+            {meal.price.split('/').map(p => <div key={meal.title_fi+p}>{p}</div> )}
           </Col>
           <Col xs={3} className='MealDietcodes d-flex align-items-center'>
             <Row>{meal.dietcodes}</Row>
