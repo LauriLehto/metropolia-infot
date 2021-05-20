@@ -15,7 +15,7 @@ const MealRow = ({meal}) => {
         </Row>
       </Col>
       <Col xs={6}>
-        <Row className="d-flex justify-content-center" style={{height:"100%"}}>
+        <Row className="d-flex justify-content-around" style={{height:"100%"}}>
           <Col xs={3} className='MealPrices align-self-center' >
             {meal.price.split('/').map(p => <div key={meal.title_fi+p}>{p}</div> )}
           </Col>

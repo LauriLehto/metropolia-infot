@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { 
+  Container,
   Col, 
   Row,
   Spinner
@@ -62,13 +63,13 @@ const Menu = () => {
 
 
   return (
-    <>
+    <Container fluid>
       <Row>
         <Col>
         { thisday && <h4>Tarjolla huomenna</h4>}
         </Col>
       </Row>
-      <Row className='MenuWrapper' className="d-flex align-items-center justify-content-center">
+      <Row className="d-flex align-items-center justify-content-center">
         { Object.keys(data).length ?
           <Col>
             { Object.keys(data.courses) && Object.keys(data.courses).map(c => {
@@ -81,7 +82,7 @@ const Menu = () => {
           <Spinner animation="border" role="status" />
         }
       </Row>
-    </> 
+    </Container> 
   )
 }
 
