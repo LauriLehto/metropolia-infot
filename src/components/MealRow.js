@@ -4,8 +4,8 @@ import '../styles/MealRow.css'
 
 import QRCode from 'qrcode.react'
 
-
 const MealRow = ({meal}) => {
+  console.log(meal)
   return (
     <Row className='MealRow' key={meal.title_fi}>
       <Col xs={6}>
@@ -19,20 +19,21 @@ const MealRow = ({meal}) => {
           <Col xs={3} className='MealPrices align-self-center' >
             {meal.price.split('/').map(p => <div key={meal.title_fi+p}>{p}</div> )}
           </Col>
-          <Col xs={3} className='MealDietcodes d-flex align-items-center'>
+          <Col xs={3} className='MealDietcodes d-flex align-items-center justify-content-center'>
             <Row>{meal.dietcodes}</Row>
           </Col>
           <Col xs={3} className='MealDietInfo '  >
-            <Row className="d-flex justify-content-end h-100 d-inline-block">
-              { meal.additionalDietInfo.dietcodeImages ? 
-                meal.additionalDietInfo.dietcodeImages.map(image =>
+            {meal.additionalDietInfo &&
+              <Row className="d-flex justify-content-end h-100 d-inline-block">
+                { meal.additionalDietInfo.dietcodeImages ? meal.additionalDietInfo.dietcodeImages.map(image =>
                   <Col xs={4} key={meal.title_fi+image} className="d-flex align-self-center">
                     <img   src={image}  alt='diet icon' />
                   </Col>
-                ) :
-                <QRCode value="https://www.sodexo.fi/en/restaurants/metropolia-myllypuro" />
+                  ) :
+                  <QRCode value="https://www.sodexo.fi/en/restaurants/metropolia-myllypuro" />
+                }
+              </Row>
             }
-            </Row>
           </Col>
         </Row>
       </Col>
