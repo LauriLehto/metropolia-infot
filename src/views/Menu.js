@@ -63,13 +63,12 @@ const Menu = () => {
 
   return (
     <>
-     
       <Row>
         <Col>
         { thisday && <h4>Tarjolla huomenna</h4>}
         </Col>
       </Row>
-      <Row className='MenuWrapper'>
+      <Row className='MenuWrapper' className="d-flex align-items-center justify-content-center">
         { Object.keys(data).length ?
           <Col>
             { Object.keys(data.courses) && Object.keys(data.courses).map(c => {

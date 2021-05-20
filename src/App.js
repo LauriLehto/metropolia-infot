@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
-import { Container } from 'react-bootstrap'
+import { Container, Row, Col, Button } from 'react-bootstrap'
 
 import TopBar from './components/TopBar'
 import Traffic from './views/Traffic'
@@ -13,9 +13,18 @@ function App() {
       <TopBar />
       <Switch>
         <Route path="/" exact>
-          <Link to="/liikenne">Liikenne</Link>
-          <Link to="/ruokalista">Ruokalista</Link>
-          <div>Koti</div>
+          <Row style={{height:"50%"}}>
+            <Col className="d-flex justify-content-center align-items-center">
+              <Link to="/liikenne">
+                <Button variant="info" size="lg">Liikenne</Button>
+              </Link>
+            </Col>
+            <Col className="d-flex justify-content-center align-items-center">
+              <Link to="/ruokalista">
+                <Button variant="secondary" size="lg">Ruokalista</Button>
+              </Link>
+            </Col>
+          </Row>
         </Route>
         <Route path="/liikenne">
           <Traffic />
