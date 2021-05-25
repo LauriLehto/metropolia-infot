@@ -23,7 +23,7 @@ const MealRow = ({meal}) => {
             <Row>{meal.dietcodes}</Row>
           </Col>
           <Col xs={3} className='MealDietInfo '  >
-            { meal.additionalDietInfo ?
+            { meal.additionalDietInfo && meal.additionalDietInfo.dietcodeImages ?
               <Row className="d-flex justify-content-end h-100 d-inline-block">
                 { meal.additionalDietInfo.dietcodeImages &&
                   meal.additionalDietInfo.dietcodeImages.map(image =>
