@@ -80,14 +80,14 @@ const Traffic = () => {
               const dataDay1 = cleanData.filter(d => d.time > midnightCheck)
               const dataDay2 = cleanData.filter(d => d.time < midnightCheck)
               setData([...dataDay1, ...dataDay2])
+              return null;
             })
-            return null;
           })
       })
      // if(!stops.length){
       
       
-  }, [])
+  }, [ getStopById, getStationInfo, stopsByRadius, hslApiUrl, midnightCheck])
 
   const updateStops = async (stops) => {
     return Promise.all(stops.map(stop => getData(getStopById(stop.gtfsId))))
@@ -145,7 +145,7 @@ const Traffic = () => {
             <tbody>
               {hslData.map(d => 
                 <tr key={hslData.indexOf(d)}>
-                  <td><img style={{height:30,width:30}} src={d.type==="train" ? "Juna cmyk-test.svg" : "Bussi cmyk-01.svg"} /></td>
+                  <td><img alt="transportation icon" style={{height:30,width:30}} src={d.type==="train" ? "Juna cmyk-test.svg" : "Bussi cmyk-01.svg"} /></td>
                   <td>{convertSeconds(d.time)}</td>
                   <td>{d.heading.toUpperCase()}</td>
                   <td>{d.stop}</td>
