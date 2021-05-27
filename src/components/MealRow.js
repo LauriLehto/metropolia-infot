@@ -5,7 +5,7 @@ import '../styles/MealRow.css'
 import QRCode from 'qrcode.react'
 
 const MealRow = ({meal}) => {
-  console.log(meal)
+  //console.log(meal)
   return (
     <Row className='MealRow' key={meal.title_fi}>
       <Col xs={6}>
