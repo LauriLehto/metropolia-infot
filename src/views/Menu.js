@@ -69,7 +69,7 @@ const Menu = () => {
         { thisday && <h4>Tarjolla huomenna</h4>}
         </Col>
       </Row>
-      <Row className="d-flex align-items-center justify-content-center">
+      <Row className="d-flex align-items-center justify-content-center" >
         { Object.keys(data).length ?
           <Col>
             { Object.keys(data.courses) && Object.keys(data.courses).map(c => {
@@ -79,7 +79,7 @@ const Menu = () => {
             })}
           </Col>
           : 
-          <Spinner animation="border" role="status" variant="light" />
+          <Spinner animation="border" role="status" variant="secondary" />
         }
       </Row>
     </Container> 
