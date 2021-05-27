@@ -29,6 +29,35 @@ const Traffic = () => {
   const [stops, setStops] = useState([])
  
   useEffect(() => {
+
+    const updateStops = async (stops) => {
+      return Promise.all(stops.map(stop => getData(getStopById(stop.gtfsId))))
+    }
+  
+    const updateStations= async () => {
+      const hslStations = ['HSL:2000204']
+      return Promise.all(hslStations.map(id => getData(getStationInfo(id))))
+    }
+  
+    const updateStopsByRadius = async () => {
+      return getData(stopsByRadius(kp.lat, kp.lon))
+    }
+  
+    const getData = async (query, id) => {
+      try {
+        return axios({
+          url: hslApiUrl,
+          method: 'post',
+          data: {
+            query: query
+          }
+        });
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    
     let newData = []
     updateStopsByRadius()
       .then(result => {
@@ -89,33 +118,7 @@ const Traffic = () => {
       
   }, [ getStopById, getStationInfo, stopsByRadius, hslApiUrl, midnightCheck])
 
-  const updateStops = async (stops) => {
-    return Promise.all(stops.map(stop => getData(getStopById(stop.gtfsId))))
-  }
-
-  const updateStations= async () => {
-    const hslStations = ['HSL:2000204']
-    return Promise.all(hslStations.map(id => getData(getStationInfo(id))))
-  }
-
-  const updateStopsByRadius = async () => {
-    return getData(stopsByRadius(kp.lat, kp.lon))
-  }
-
-  const getData = async (query, id) => {
-    try {
-      return axios({
-        url: hslApiUrl,
-        method: 'post',
-        data: {
-          query: query
-        }
-      });
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
+  
   const convertSeconds = (seconds) => {
     let hours = parseInt(seconds / 3600)
     if(hours===24){hours=0}

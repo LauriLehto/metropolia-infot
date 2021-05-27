@@ -79,7 +79,7 @@ const Menu = () => {
             })}
           </Col>
           : 
-          <Spinner animation="border" role="status" />
+          <Spinner animation="border" role="status" variant="light" />
         }
       </Row>
     </Container> 
