@@ -40,6 +40,7 @@ const Traffic = () => {
             result.map(r => {
               const stop = r.data.data.stop.code
               const data =  r.data.data.stop.stoptimesWithoutPatterns
+              console.log(r.data.data.stop)
               data.map(d=> {
                 const obj = {}
                 obj.stop = stop
@@ -51,7 +52,7 @@ const Traffic = () => {
               })
               //organise all results according to time
               const cleanData = [...hslData, ...newData].sort((a, b) => a.time > b.time ? 1 : -1)
-              cleanData.filter((item, pos) => cleanData[pos+1] && cleanData[pos+1].heading !== item.heading ||  cleanData[pos+1] && cleanData[pos+1].time !== item.time)
+              cleanData.filter((item, pos) => (cleanData[pos+1] && (cleanData[pos+1].heading !== item.heading)) ||  (cleanData[pos+1] && (cleanData[pos+1].time !== item.time)))
               //organise results by day when nearing the end of the day (86400 -> 0000 seconds)
               const dataDay1 = cleanData.filter(d => d.time > midnightCheck)
               const dataDay2 = cleanData.filter(d => d.time < midnightCheck)
@@ -71,14 +72,16 @@ const Traffic = () => {
                 obj.heading = d.headsign
                 obj.type = "train"
                 newData.push(obj)
+                return null;
               })
               const cleanData = [...hslData, ...newData].sort((a, b) => a.time > b.time ? 1 : -1)
-              cleanData.filter((item, pos) => cleanData[pos+1] && cleanData[pos+1].heading !== item.heading ||  cleanData[pos+1] && cleanData[pos+1].time !== item.time)
+              cleanData.filter((item, pos) => (cleanData[pos+1] && (cleanData[pos+1].heading !== item.heading)) ||  (cleanData[pos+1] && (cleanData[pos+1].time !== item.time)))
               //organise results by day when nearing the end of the day (86400 -> 0000 seconds)
               const dataDay1 = cleanData.filter(d => d.time > midnightCheck)
               const dataDay2 = cleanData.filter(d => d.time < midnightCheck)
               setData([...dataDay1, ...dataDay2])
             })
+            return null;
           })
       })
      // if(!stops.length){
