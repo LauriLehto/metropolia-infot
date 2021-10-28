@@ -23,7 +23,7 @@ const MealRow = ({meal}) => {
             <Row>{meal.dietcodes}</Row>
           </Col>
           <Col xs={3} className='MealDietInfo '  >
-            { meal.additionalDietInfo && meal.additionalDietInfo.dietcodeImages ?
+            { meal.additionalDietInfo && meal.additionalDietInfo.dietcodeImages &&
               <Row className="d-flex justify-content-end h-100 d-inline-block">
                 { meal.additionalDietInfo.dietcodeImages &&
                   meal.additionalDietInfo.dietcodeImages.map(image =>
@@ -33,10 +33,13 @@ const MealRow = ({meal}) => {
                   ) 
                 }
               </Row>
-            :
-              <QRCode value="https://www.sodexo.fi/en/restaurants/metropolia-myllypuro" />
             }
           </Col>
+         {/*  <Col>
+            <Row>
+              <QRCode value="https://www.sodexo.fi/en/restaurants/metropolia-myllypuro" />
+            </Row>
+          </Col> */}
         </Row>
       </Col>
     </Row>

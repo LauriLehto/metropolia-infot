@@ -4,7 +4,8 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 
 import TopBar from './components/TopBar'
 import Traffic from './views/Traffic'
-import Menu from './views/Menu'
+import Sodexo from './views/Sodexo'
+import Foodnco from './views/Foodnco'
 
 function App() {
   return (
@@ -20,8 +21,13 @@ function App() {
               </Link>
             </Col>
             <Col className="d-flex justify-content-center align-items-center">
-              <Link to="/ruokalista">
-                <Button variant="secondary" size="lg">Ruokalista</Button>
+              <Link to="/sodexo">
+                <Button variant="secondary" size="lg">Sodexo</Button>
+              </Link>
+            </Col>
+            <Col className="d-flex justify-content-center align-items-center">
+              <Link to="/foodnco">
+                <Button variant="secondary" size="lg">Food'n'Co</Button>
               </Link>
             </Col>
           </Row>
@@ -29,8 +35,11 @@ function App() {
         <Route path="/liikenne">
           <Traffic />
         </Route>
-        <Route path="/ruokalista">
-          <Menu />
+        <Route path="/sodexo">
+          <Sodexo />
+        </Route>
+        <Route path="/foodnco">
+          <Foodnco />
         </Route>
       </Switch>
     </Router>

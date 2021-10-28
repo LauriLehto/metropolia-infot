@@ -19,23 +19,26 @@ const Traffic = () => {
     lon: 24.758149
   }
 
-  //present time in seconds for midnight check
-  let now = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' })
-  let midnightCheck = now.split('klo')[1].split('.')
-  midnightCheck = midnightCheck.map(t => parseInt(t))
-  midnightCheck = midnightCheck[0]*3600+midnightCheck[1]*60+midnightCheck[2]
-
+  
   const [hslData, setData] = useState([])
   const [stops, setStops] = useState([])
  
   useEffect(() => {
+    //present time in seconds for midnight check
+    let now = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' })
+    let midnightCheck = now.split('klo')[1].split('.')
+    midnightCheck = midnightCheck.map(t => parseInt(t))
+    midnightCheck = midnightCheck[0]*3600+midnightCheck[1]*60+midnightCheck[2]
+
 
     const updateStops = async (stops) => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       return Promise.all(stops.map(stop => getData(getStopById(stop.gtfsId))))
     }
   
     const updateStations= async () => {
       const hslStations = ['HSL:2000204']
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       return Promise.all(hslStations.map(id => getData(getStationInfo(id))))
     }
   
@@ -47,6 +50,7 @@ const Traffic = () => {
     const getData = async (query, id) => {
       try {
         return axios({
+          // eslint-disable-next-line react-hooks/exhaustive-deps
           url: hslApiUrl,
           method: 'post',
           data: {
@@ -60,6 +64,7 @@ const Traffic = () => {
 
     
     let newData = []
+    
     updateStopsByRadius()
       .then(result => {
         const stopsByR = result.data.data.stopsByRadius.edges.map(d => d.node.stop)
@@ -81,6 +86,7 @@ const Traffic = () => {
                 return ''
               })
               //organise all results according to time
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               const cleanData = [...hslData, ...newData].sort((a, b) => a.time > b.time ? 1 : -1)
               cleanData.filter((item, pos) => (cleanData[pos+1] && (cleanData[pos+1].heading !== item.heading)) ||  (cleanData[pos+1] && (cleanData[pos+1].time !== item.time)))
               //organise results by day when nearing the end of the day (86400 -> 0000 seconds)
@@ -117,10 +123,8 @@ const Traffic = () => {
             })
           })
       })
-     // if(!stops.length){
       
-      
-  }, [ setData ])
+  }, [])
 
   
   const convertSeconds = (seconds) => {
