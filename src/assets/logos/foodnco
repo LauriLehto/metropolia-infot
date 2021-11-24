@@ -1,0 +1,8 @@
+<a class="header-logo bg-contain" href="/" target="_self" ng-class="{'hide-inline-sm': showSearch}" delayed-show="400" style="display: block;">
+  <div class="logo-background"></div>
+  <i class="icon-fazer icon-fazer-logo z-index-10 relative"></i>
+</a>
+
+<link rel="shortcut icon" href="/globalassets/images/favicons/foodco_logo_32x32.png" type="image/x-icon">
+
+url(/static/img/amica-logo-small.png);
