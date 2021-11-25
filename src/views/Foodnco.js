@@ -40,12 +40,13 @@ const Menu = () => {
   return (
     <Container 
       fluid 
-      style={{height: '100%'}}
+      style={{height: '80%', margin: 'auto'}}
+      /* className="d-flex align-items-center justify-content-center flex-column" */
     >
-      <Row>
+      <Row style={{paddingTop:"5%"}}>
         <Col style={{fontSize:'1.2em'}}>{`Food & CO - ${foodnco.address}`}</Col>
       </Row>
-      <Row>
+      <Row style={{padding:"2%"}}>
         <Col xs={6}>{foodnco.open.fi} / {foodnco.open.en} klo. {foodnco.open.time}</Col>
         <Col xs={6}>{foodnco.lunch.fi} / {foodnco.lunch.en} klo. {foodnco.lunch.time}</Col>
       </Row>
@@ -54,10 +55,10 @@ const Menu = () => {
         >
         { Object.keys(data).length ?
           <>
-            <Col>
+            <Col  style={{padding:"3%"}}>
               <FoodncoRows data={data} />
             </Col>
-            <Col xs ={2}  style={{height:"100%"}} className="d-flex align-items-start flex-column">
+            <Col xs ={3}  style={{padding:"3%", height:"80%"}} className="d-flex align-items-start flex-column">
               {foodnco.diets.split(', ').map(diet => <>{diet}<br/></>)}
             </Col>
           </>

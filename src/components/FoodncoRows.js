@@ -1,11 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 
-import QRCode from 'qrcode.react'
-/* import '../styles/MealRow.css'
- */
-import foodnco from '../data/foodnco'
-
 const MealRow = ({data}) => {
   console.log(data)
   const meals_en = data.en.MenusForDays[0].SetMenus
@@ -28,7 +23,7 @@ const MealRow = ({data}) => {
                   const mealDataEn = en_components[index].split('(')
                   return (
                     <>
-                      <Row className='MealRow' key={mealDataFi[0]}>
+                      <Row  key={mealDataFi[0]}>
                         <Col xs={6}>
                           <Row>{mealDataFi[0].toUpperCase()}</Row>
                           <Row style={{fontStyle:'italic'}}>{mealDataEn[0]}</Row>
