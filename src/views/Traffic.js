@@ -154,7 +154,7 @@ const Traffic = () => {
                 </tr>
               </thead>
             <tbody>
-              {hslData.map(d => 
+              {hslData.slice(0,19).map(d => 
                 <tr key={hslData.indexOf(d)}>
                   <td><img alt="transportation icon" style={{height:30,width:30}} src={d.type==="train" ? "Juna cmyk-test.svg" : "Bussi cmyk-01.svg"} /></td>
                   <td>{convertSeconds(d.time)}</td>

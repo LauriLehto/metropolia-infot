@@ -34,12 +34,13 @@ const MealRow = ({meal}) => {
                 }
               </Row>
             }
+            {meal.category === "Jälkiruoka" && 
+              <Row>
+                <QRCode value="https://www.sodexo.fi/en/restaurants/metropolia-myllypuro" />
+              </Row>
+            }
           </Col>
-         {/*  <Col>
-            <Row>
-              <QRCode value="https://www.sodexo.fi/en/restaurants/metropolia-myllypuro" />
-            </Row>
-          </Col> */}
+          
         </Row>
       </Col>
     </Row>

@@ -4,6 +4,10 @@ Metropolia tilasi tämän toteutuksen osana innovaatio opintojani ja tarkoitus o
 
 Tämä github repo on osa toteutusta ja sen tarkoitus on näyttää verkkosivuna Karaportin opetuspisteen ruokalan lounaslista ja HSL:n liikennetiedot Karaportilta.
 
+Sovellus julkaistu osoitteessa https://metropolia.netlify.app
+
+
+
 ## SPA, React ja Netlify
 
 Projekti on alustettu create-react-appilla ja se on julkaistu Netlifyn palvelimelle. Sovellus pyörii hyvin selaimella, mutta ruokalistan osalta aiheutti cors-ongelman. Yritettyäni ratkaista ongelman käyttäen cors-anywhere ratkaisua löysin ilokseni Netlifyn oman ratkaisun cors-ongelmaan.
@@ -31,7 +35,17 @@ Tarvittava funktio luotiin ensin antamalla komento
 ```
 netlify functions:create
 ```
-ja avautuvasta valikosta valittiin `node-fetch` ja valmis proxy funktio oli sen jälkeen löydettävissä kansiosta `/functions/node-fetch`. Tätä funktiota muokkaamalla pystyi hakemaan ruokalistan jsonina Sodexon [sivuilta](https://www.sodexo.fi/en/restaurants/metropolia-myllypuro). Karaportille ei ollut saatavana projektin aikaan ruokalistaa, joten käytin Myllypuroa testaamista varten.
+ja avautuvasta valikosta valittiin `node-fetch` ja valmis proxy funktio oli sen jälkeen löydettävissä kansiosta `/functions/node-fetch`. Tätä funktiota muokkaamalla pystyi hakemaan ruokalistan jsonina Sodexon [sivuilta](https://www.sodexo.fi/en/restaurants/metropolia-myllypuro). Karaportille ei ollut saatavana projektin alussa ruokalistaa, joten käytin Myllypuroa testaamista varten. Nyt projektiin on lisätty Food & CO päivittyvä ruokalista. Fazerin api ei tarjoa muuta kuin päivittäin vaihtuvien annosten tiedot, joten sivun staattiset tiedot tulevat data-jsonista '/src/data/foodnco.js'.
+
+## Julkaiseminen
+
+Sovelluksen voi julkaista suoraan Netlifylla käyttäen paikallisesti netlify-cli'a komennoilla
+
+```
+netlify build
+netlify deploy --prod
+```
+
 
 ---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

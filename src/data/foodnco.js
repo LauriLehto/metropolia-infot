@@ -10,6 +10,7 @@ export default {
     en: 'Lunch',
     time: '10.30-13.15'
   },
-  address: 'Karakaarenkuja 6, 02610 Espoo'
+  address: 'Karakaarenkuja 6, 02610 Espoo',
+  diets: '(G) Gluteeniton, (L) Laktoositon, (VL) Vähälaktoosinen, (M) Maidoton, (*) Suomalaisten ravitsemussuositusten mukainen, (Veg) Soveltuu vegaaniruokavalioon, (VS) Sis. tuoretta valkosipulia, (A) Sis. allergeeneja'
 
 }

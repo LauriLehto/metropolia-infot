@@ -29,7 +29,6 @@ const Menu = () => {
       }, {query: today})
         .then((x) => x.json())
         .then(({ data }) => {
-          //console.log('today', data)
           setData(data)
         })
     } catch(err){
@@ -43,19 +42,25 @@ const Menu = () => {
       fluid 
       style={{height: '100%'}}
     >
-      <Row style={{padding:'3%'}}>
-        <Col xs={5} style={{fontSize:'1.2em'}}>Food'n'Co, {foodnco.address}</Col>
-        <Col xs={2}>{foodnco.open.fi}<br/>{foodnco.open.en}</Col>
-        <Col xs={2} className="d-flex align-items-center">{foodnco.open.time}</Col>
-        <Col xs={1}>{foodnco.lunch.fi}<br/>{foodnco.lunch.en}</Col>
-        <Col xs={2} className="d-flex align-items-center">{foodnco.lunch.time}</Col>
+      <Row>
+        <Col style={{fontSize:'1.2em'}}>{`Food & CO - ${foodnco.address}`}</Col>
+      </Row>
+      <Row>
+        <Col xs={6}>{foodnco.open.fi} / {foodnco.open.en} klo. {foodnco.open.time}</Col>
+        <Col xs={6}>{foodnco.lunch.fi} / {foodnco.lunch.en} klo. {foodnco.lunch.time}</Col>
       </Row>
       <br />
-      <Row className="d-flex align-items-center justify-content-center">
+      <Row 
+        >
         { Object.keys(data).length ?
-          <Col>
-            <FoodncoRows data={data} />
-          </Col>
+          <>
+            <Col>
+              <FoodncoRows data={data} />
+            </Col>
+            <Col xs ={2}  style={{height:"100%"}} className="d-flex align-items-start flex-column">
+              {foodnco.diets.split(', ').map(diet => <>{diet}<br/></>)}
+            </Col>
+          </>
           : 
           <Spinner animation="border" role="status" variant="light" />
         }

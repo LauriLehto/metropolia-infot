@@ -8,6 +8,7 @@ import {
 
 import '../styles/Menu.css'
 import SodexoRow from '../components/SodexoRow'
+import sodexo from '../data/sodexo'
 
 const Menu = () => {
 
@@ -54,10 +55,8 @@ const Menu = () => {
         { Object.keys(data).length ?
           <Col>
             { Object.keys(data.courses) && Object.keys(data.courses).map(c => {
-              console.log(data.courses[c])
-              return(
-                <SodexoRow key={data.courses[c].title_fi} meal={data.courses[c]} />
-              )
+              return sodexo.categories.includes(data.courses[c].category) && <SodexoRow key={data.courses[c].title_fi} meal={data.courses[c]} />
+              
             })}
           </Col>
           : 
