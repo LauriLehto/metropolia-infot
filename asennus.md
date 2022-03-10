@@ -20,19 +20,26 @@ Liitä ulkoinen näppäimistö Raspberry Pihin
 * Avaa laitteen valikko painamalla Ctrl + N
 * Aseta serverin osoitteeksi `http://digisi.jelastic.metropolia.fi/`
 
-### Laitteen lisensoiminen
+## Laitteen lisensoiminen
 Tässä kohdassa tarvitaan edellisessä vaiheessa talteen otettua Player id:tä.
-* Kirjaudu käyttäjätunnuksellasi osoitteeseen `pisignage.com`
+
+### Tilaa lisenssejä
+Kirjaudu käyttäjätunnuksellasi osoitteeseen `pisignage.com`
 * Valitse sivuvalikosta kohta "Subscription/Licenses"
-* Tilaa uusia näyttölisenssejä omalle palvelimelle kohdasta "Player License Only with no subscription"
+* Valitse "Player License Only with no subscription", jolla tilaat uusia näyttölisenssejä omalle palvelimelle
   * Kyseessä on kertaluonteinen laitekohtainen lisenssimaksu, joka ei sisällä tilausta
   * Muut kaksi valintaa koskevat pisignagen omia tilauksia. Valitse oikea vaihtoehto tarkkaan, jos haluat liittää laitteet omalle palvelimelle
-* Kun olet tilannut tarvittavan määrän lisenssejä avaa sivuvalikon kohta "Players"
+### Rekisteröi laitteet
+* Tilattuasi lisenssit avaa "Players"
 * Sivun oikeasta yläkulmasta valitse "Register player"
 * Oletusarvona on valittu "Managed". Vaihda valinta "Player license only"
   * **OLE TARKKANA!!!** Vaikka valinta menisikin väärin, pystyt lataamaan ja asentamaan lisenssin, mutta laite rekisteröidään käyttämään piSignagen palvelinta ja saat näyttölaitteille inhottavan tikkerin, vaikka olet maksanut lisenssistä
 * Täytä annettuihin kenttiin talteen ottamasti Player id ja nimitiedot. Nimitiedot lähinnä auttavat tunnistamaan laitteen virhetilanteissa, mutta ovat melko merkityksettömiä, koska arvot voidaan määritellään palvelimelta.
+### Lataa lisenssit
 * Kun olet rekisteröinyt laitteet, lisenssit ovat ladattavissa sivulla "Subscription/Licenses" kohdassa "Licenses issued". Klikkaa "view" ja lataa joko kaikki lisenssit tai yksittäinen lisenssi.
+
+### Lisenssin lisääminen palvelimelle
+
 * Seuraavaksi mene omalle pisignage palvelimelle ja lataa lisenssi sivulla "Settings" ja valitse "Upload"
 
 Voit katsoa myös [videon](https://youtu.be/WLdU_rSTRfo)
